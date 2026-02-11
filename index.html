@@ -3,152 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Voting Excellence</title>
+    <title>選擇大對決 - 抽獎活動</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #0a0a0a;
-            color: #e5e5e5;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Noto Sans TC', sans-serif;
+            background: #f4f4f4; /* 淺灰色背景，模擬圖片質感 */
         }
-        .gold-text {
-            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fcf6ba, #aa771c);
+        /* 標題漸層 */
+        .title-gradient {
+            background: linear-gradient(to bottom, #d4a373, #a67c00);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .gold-border {
-            border: 1px solid transparent;
-            border-image: linear-gradient(to bottom right, #bf953f, #aa771c);
-            border-image-slice: 1;
+        /* A組金屬紅 */
+        .btn-a {
+            background: linear-gradient(180deg, #e63946 0%, #7b0d1e 100%);
+            box-shadow: 0 4px 0 #560000, inset 0 2px 5px rgba(255,255,255,0.4);
         }
-        .gold-btn {
-            background: linear-gradient(135deg, #bf953f 0%, #aa771c 100%);
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        /* B組金屬藍 */
+        .btn-b {
+            background: linear-gradient(180deg, #0056b3 0%, #002d5f 100%);
+            box-shadow: 0 4px 0 #001a35, inset 0 2px 5px rgba(255,255,255,0.4);
         }
-        .gold-btn:hover {
-            box-shadow: 0 0 15px rgba(191, 149, 63, 0.6);
-            transform: translateY(-2px);
+        /* 進度條容器 */
+        .progress-track {
+            background: #1a1a1a;
+            border: 3px solid #333;
+            height: 34px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 50px;
         }
-        .progress-container {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(191, 149, 63, 0.2);
+        /* A組進度 */
+        .bar-a {
+            background: linear-gradient(90deg, #7b0000 0%, #ff1a1a 100%);
+            height: 100%;
+            transition: width 0.8s ease-out;
+            border-right: 2px solid #fff;
         }
-        .progress-fill {
-            background: linear-gradient(90deg, #8a6e2f 0%, #bf953f 50%, #fcf6ba 100%);
-            box-shadow: 0 0 10px rgba(191, 149, 63, 0.4);
-            transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        /* B組進度 */
+        .bar-b {
+            background: linear-gradient(90deg, #003d80 0%, #0066ff 100%);
+            height: 100%;
+            transition: width 0.8s ease-out;
         }
-        .card-glass {
-            background: rgba(20, 20, 20, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(191, 149, 63, 0.3);
+        /* VS 發光效果 */
+        .vs-glow {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            text-shadow: 0 0 10px #fff;
         }
-        h1 { font-family: 'Playfair Display', serif; }
+        .rule-dot { color: #d4a373; margin-right: 8px; }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
+<body class="p-4 md:p-8 flex justify-center">
 
-    <div class="card-glass p-10 rounded-none shadow-2xl w-full max-w-lg relative overflow-hidden">
-        <!-- 裝飾線條 -->
-        <div class="absolute top-0 left-0 w-full h-1 gold-btn"></div>
-        
-        <header class="text-center mb-12">
-            <h2 class="text-xs tracking-[0.3em] text-gray-500 uppercase mb-2">Exclusive Awards</h2>
-            <h1 class="text-4xl md:text-5xl gold-text font-bold">年度卓越評選</h1>
-            <div class="w-24 h-px bg-gold-500 mx-auto mt-4 opacity-30" style="background: #bf953f;"></div>
-        </header>
-
-        <!-- 獎項 A -->
-        <div class="mb-12">
-            <div class="flex justify-between items-end mb-3">
-                <div>
-                    <span class="text-xs text-gray-500 uppercase tracking-widest">Nominee</span>
-                    <h3 class="text-xl font-light tracking-wide">獎項 A <span class="text-gray-600 text-sm">/ Classic Gold</span></h3>
-                </div>
-                <div class="text-right">
-                    <span id="percent-A" class="text-2xl font-light gold-text">0%</span>
-                </div>
-            </div>
-            <div class="progress-container w-full h-2 mb-6">
-                <div id="bar-A" class="progress-fill h-full" style="width: 0%"></div>
-            </div>
-            <button onclick="castVote('A')" class="gold-btn w-full py-3 text-black font-bold text-sm tracking-widest">
-                投下神聖一票
-            </button>
+    <div class="max-w-2xl w-full bg-white shadow-2xl rounded-3xl overflow-hidden border border-gray-200">
+        <!-- 頂部標題區 -->
+        <div class="text-center py-8 px-4">
+            <h1 class="text-5xl font-black text-gray-800 tracking-tighter mb-2">抽獎規則</h1>
+            <h2 class="text-3xl font-bold title-gradient mb-4">【選擇大對決】</h2>
+            <p class="text-xl font-bold text-gray-700">選擇比例一致，全體固定抽 <span class="text-orange-600">iPhone!</span></p>
         </div>
 
-        <!-- 獎項 B -->
-        <div class="mb-8">
-            <div class="flex justify-between items-end mb-3">
-                <div>
-                    <span class="text-xs text-gray-500 uppercase tracking-widest">Nominee</span>
-                    <h3 class="text-xl font-light tracking-wide">獎項 B <span class="text-gray-600 text-sm">/ Royal Black</span></h3>
+        <!-- 獎項對決區 -->
+        <div class="px-6 py-4 bg-gray-50">
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <!-- A 組 -->
+                <div class="text-center">
+                    <img src="https://img.icons8.com/color/144/nintendo-switch-console.png" class="mx-auto mb-2 w-32 h-32 object-contain" alt="Switch">
+                    <div class="bg-red-800 text-white py-1 px-3 rounded-md text-sm font-bold inline-block">A組 Nintendo Switch</div>
                 </div>
-                <div class="text-right">
-                    <span id="percent-B" class="text-2xl font-light gold-text">0%</span>
+                <!-- B 組 -->
+                <div class="text-center">
+                    <img src="https://img.icons8.com/color/144/diamond--v1.png" class="mx-auto mb-2 w-32 h-32 object-contain" alt="Diamond">
+                    <div class="bg-blue-900 text-white py-1 px-3 rounded-md text-sm font-bold inline-block">B組 鑽石 500,000</div>
                 </div>
             </div>
-            <div class="progress-container w-full h-2 mb-6">
-                <div id="bar-B" class="progress-fill h-full" style="width: 0%"></div>
+
+            <!-- 長條圖百分比 -->
+            <div class="flex justify-between font-black text-3xl px-2 mb-1">
+                <span id="percent-A" class="text-red-600">--%</span>
+                <span id="percent-B" class="text-blue-700">--%</span>
             </div>
-            <button onclick="castVote('B')" class="gold-btn w-full py-3 text-black font-bold text-sm tracking-widest">
-                投下神聖一票
-            </button>
+
+            <!-- 進度條主體 -->
+            <div class="progress-track flex mb-2">
+                <div id="bar-A" class="bar-a" style="width: 50%"></div>
+                <div id="bar-B" class="bar-b" style="width: 50%"></div>
+                <div class="vs-glow text-white italic font-black text-xl">VS</div>
+            </div>
+
+            <!-- 人數顯示 -->
+            <div class="flex justify-between text-gray-500 font-bold mb-8 px-2">
+                <span id="count-A">0 人</span>
+                <span id="count-B">0 人</span>
+            </div>
+
+            <!-- 投票按鈕 -->
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <button onclick="castVote('A')" class="btn-a text-white py-4 rounded-full font-bold text-lg active:translate-y-1 transition-all">
+                    選擇 A: Nintendo Switch
+                </button>
+                <button onclick="castVote('B')" class="btn-b text-white py-4 rounded-full font-bold text-lg active:translate-y-1 transition-all">
+                    選擇 B: 鑽石 500,000
+                </button>
+            </div>
         </div>
-        
-        <footer class="mt-12 text-center">
-            <p id="total-votes" class="text-[10px] uppercase tracking-[0.2em] text-gray-600">Total Authenticated Votes: 0</p>
-        </footer>
+
+        <!-- 規則與 iPhone 區 -->
+        <div class="p-8 border-t border-gray-100">
+            <ul class="text-lg font-bold text-gray-700 space-y-3 mb-10">
+                <li><span class="rule-dot">●</span>若逾達 <span class="text-red-600">50% / 50%</span> ➜ 全體統一抽 <span class="text-orange-600">iPhone!</span></li>
+                <li><span class="rule-dot">●</span>若比例不達 <span class="text-red-600">50% / 50%</span> ➜ 僅抽選擇比例較高的獎項</li>
+            </ul>
+
+            <div class="flex flex-col md:flex-row items-center justify-center gap-6">
+                <img src="https://img.icons8.com/fluency/240/iphone-14-pro.png" class="w-40" alt="iPhone 17">
+                <div class="text-center md:text-left">
+                    <h3 class="text-3xl font-black text-gray-800 leading-tight">
+                        成功達 <span class="text-orange-600">50%/50%</span><br>
+                        全體固定抽<br>
+                        <span class="text-4xl title-gradient">iPhone 17!</span>
+                    </h3>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        const API_URL = '/api'; 
+        const API_URL = ''; // 如果是部署到 Render，這裡保持空字串即可
 
         async function updateUI() {
             try {
-                const res = await fetch(`${API_URL}/votes`);
+                const res = await fetch(`${API_URL}/api/votes`);
                 const data = await res.json();
                 
-                // 更新 A
+                // 更新百分比與寬度
                 document.getElementById('bar-A').style.width = data.A.percent + '%';
-                document.getElementById('percent-A').innerText = data.A.percent + '%';
-                
-                // 更新 B
                 document.getElementById('bar-B').style.width = data.B.percent + '%';
+                
+                document.getElementById('percent-A').innerText = data.A.percent + '%';
                 document.getElementById('percent-B').innerText = data.B.percent + '%';
                 
-                document.getElementById('total-votes').innerText = `Total Authenticated Votes: ${data.total}`;
-            } catch (e) {
-                console.error("Fetch error:", e);
-            }
+                // 更新人數
+                document.getElementById('count-A').innerText = data.A.count.toLocaleString() + ' 人';
+                document.getElementById('count-B').innerText = data.B.count.toLocaleString() + ' 人';
+            } catch (e) { console.error("Update failed", e); }
         }
 
         async function castVote(choice) {
-            // 增加簡單的反饋感
-            const btn = event.target;
-            const originalText = btn.innerText;
-            btn.innerText = "投票中...";
-            btn.disabled = true;
-
-            await fetch(`${API_URL}/vote`, {
+            await fetch(`${API_URL}/api/vote`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({choice})
             });
-
-            setTimeout(() => {
-                btn.innerText = originalText;
-                btn.disabled = false;
-                updateUI();
-            }, 500);
+            updateUI();
         }
 
+        // 初始化與定時刷新
         updateUI();
-        // 每 10 秒自動刷新一次票數
-        setInterval(updateUI, 10000);
+        setInterval(updateUI, 5000);
     </script>
 </body>
 </html>
