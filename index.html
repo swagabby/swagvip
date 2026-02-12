@@ -26,6 +26,11 @@
             padding: 20px;
         }
 
+        /* 語系控制 */
+        .lang-control { position: fixed; top: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; gap: 0.5rem; }
+        .lang-btn { background: var(--glass); border: 1px solid var(--glass-border); padding: 6px 12px; font-size: 11px; color: rgba(255,255,255,0.4); border-radius: 6px; cursor: pointer; transition: 0.3s; }
+        .lang-btn.active { color: #fff; border-color: #fff; background: rgba(255,255,255,0.1); }
+
         /* 主卡片 */
         .glass-card {
             background: var(--glass);
@@ -36,7 +41,6 @@
             max-width: 650px;
             padding: 40px;
             box-shadow: 0 40px 100px rgba(0,0,0,0.8);
-            position: relative;
         }
 
         /* 進度條內部 % 數 */
@@ -46,19 +50,16 @@
         .percent-text { font-weight: 900; font-size: 1.4rem; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
         .vs-label { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: #fff; color: #000; font-weight: 900; font-style: italic; padding: 2px 10px; border-radius: 4px; font-size: 12px; z-index: 10; }
 
-        /* --- 終極大獎：吸睛樣式升級 --- */
+        /* 終極大獎：流光外框 */
         .ultimate-reward-card {
             position: relative;
             background: rgba(255, 177, 0, 0.03);
             border-radius: 30px;
-            padding: 30px;
+            padding: 3px; /* 這裡作為邊框寬度 */
             overflow: hidden;
-            border: 1px solid rgba(255, 177, 0, 0.1);
             margin-top: 40px;
-            transition: 0.3s;
         }
 
-        /* 旋轉流光邊框效果 */
         .ultimate-reward-card::before {
             content: "";
             position: absolute;
@@ -66,74 +67,35 @@
             width: 200%; height: 200%;
             background: conic-gradient(transparent, transparent, transparent, var(--gold));
             animation: rotate 4s linear infinite;
-            z-index: 0;
-            opacity: 0.4;
         }
         
-        /* 內部遮罩確保內容在旋轉邊框上方 */
         .ultimate-inner {
             position: relative;
             z-index: 1;
             background: #0a0a0a;
-            border-radius: 26px;
-            padding: 20px;
+            border-radius: 27px;
+            padding: 24px;
             display: flex;
             align-items: center;
             gap: 24px;
         }
 
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* iPhone 聖光與呼吸動畫 */
-        .iphone-halo {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-shrink: 0;
-        }
+        /* iPhone 浮動 */
+        .iphone-halo { position: relative; flex-shrink: 0; display: flex; justify-content: center; }
+        .iphone-halo::after { content: ""; position: absolute; width: 100px; height: 100px; background: radial-gradient(circle, rgba(255,177,0,0.3) 0%, transparent 70%); animation: pulse 2s infinite alternate; }
+        .iphone-img { width: 90px; z-index: 2; animation: float 3s ease-in-out infinite; }
+        
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes pulse { from { transform: scale(0.8); opacity: 0.4; } to { transform: scale(1.2); opacity: 0.7; } }
 
-        .iphone-halo::after {
-            content: "";
-            position: absolute;
-            width: 120px; height: 120px;
-            background: radial-gradient(circle, rgba(255, 177, 0, 0.4) 0%, transparent 70%);
-            animation: pulse 2s infinite alternate;
-        }
-
-        .iphone-img {
-            width: 100px;
-            z-index: 2;
-            animation: float 3s ease-in-out infinite;
-            filter: drop-shadow(0 0 20px rgba(255, 177, 0, 0.3));
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        @keyframes pulse {
-            from { transform: scale(0.8); opacity: 0.3; }
-            to { transform: scale(1.2); opacity: 0.6; }
-        }
-
-        /* 金屬標題字 */
         .gold-text-metallic {
             background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fcf6ba 55%, #aa771c 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 900;
-            letter-spacing: 2px;
         }
-
-        /* 語系切換 */
-        .lang-control { position: fixed; top: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; gap: 0.5rem; }
-        .lang-btn { background: var(--glass); border: 1px solid var(--glass-border); padding: 6px 12px; font-size: 11px; color: rgba(255,255,255,0.4); border-radius: 6px; cursor: pointer; }
-        .lang-btn.active { color: #fff; border-color: #fff; background: rgba(255,255,255,0.1); }
     </style>
 </head>
 <body>
@@ -147,44 +109,53 @@
 
     <div class="glass-card">
         <header class="text-center mb-10">
-            <h1 id="i18n-main-title" class="text-4xl md:text-5xl font-black bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-500 mb-6 uppercase">VIP 專屬抽獎池</h1>
-            <div class="rule-box text-left border border-white/10 p-4 rounded-2xl bg-white/5">
+            <h1 id="i18n-main-title" class="text-4xl md:text-5xl font-black bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-500 mb-6 uppercase tracking-tight">VIP 專屬抽獎池</h1>
+            <div class="rule-box text-left border border-white/10 p-5 rounded-2xl bg-white/5">
                 <h3 id="i18n-rule-header" class="text-[10px] font-bold text-orange-400 tracking-[0.3em] uppercase mb-3">Event Rules / 活動規則</h3>
-                <ul id="i18n-rules-list" class="text-xs text-gray-400 space-y-1 font-light"></ul>
+                <ul id="i18n-rules-list" class="text-xs text-gray-400 space-y-2 font-light leading-relaxed">
+                    <!-- 動態載入規則 -->
+                </ul>
             </div>
         </header>
 
+        <!-- 獎項選擇 -->
         <div class="grid grid-cols-2 gap-6 mb-10">
             <div class="text-center">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Nintendo_Switch_Console.png/640px-Nintendo_Switch_Console.png" class="h-32 mx-auto mb-4 object-contain" alt="Switch">
-                <button id="i18n-btn-a" onclick="castVote('A')" class="w-full py-4 bg-[#ff3b30] hover:scale-105 rounded-2xl font-black text-xs transition-all">選擇 Switch</button>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Nintendo_Switch_Console.png/640px-Nintendo_Switch_Console.png" class="h-28 mx-auto mb-4 object-contain" alt="Switch">
+                <button id="i18n-btn-a" onclick="castVote('A')" class="w-full py-4 bg-[#ff3b30] hover:scale-105 active:scale-95 rounded-2xl font-black text-xs transition-all shadow-lg shadow-red-900/20">選擇 Switch</button>
             </div>
             <div class="text-center">
-                <img src="https://www.freeiconspng.com/uploads/diamond-png-21.png" class="h-32 mx-auto mb-4 object-contain" alt="Diamond">
-                <button id="i18n-btn-b" onclick="castVote('B')" class="w-full py-4 bg-[#007aff] hover:scale-105 rounded-2xl font-black text-xs transition-all">選擇 鑽石</button>
+                <img src="https://www.freeiconspng.com/uploads/diamond-png-21.png" class="h-28 mx-auto mb-4 object-contain" alt="Diamond">
+                <button id="i18n-btn-b" onclick="castVote('B')" class="w-full py-4 bg-[#007aff] hover:scale-105 active:scale-95 rounded-2xl font-black text-xs transition-all shadow-lg shadow-blue-900/20">選擇 鑽石</button>
             </div>
         </div>
 
         <!-- 互動 Bar -->
-        <div class="progress-container mb-2">
+        <div class="progress-container mb-3">
             <div id="bar-a" class="bar-a" style="width: 50%"><span id="percent-a" class="percent-text">50%</span></div>
             <div id="bar-b" class="bar-b" style="width: 50%"><span id="percent-b" class="percent-text">50%</span></div>
             <div class="vs-label">VS</div>
         </div>
+        
+        <!-- 人數顯示 -->
+        <div class="flex justify-between px-2 mb-10 text-[11px] font-bold text-gray-500 tracking-wider uppercase">
+            <span id="count-a">0 People</span>
+            <span id="count-b">0 People</span>
+        </div>
 
-        <!-- 吸睛的終極獎勵區 -->
+        <!-- 加碼獎勵區 -->
         <div class="ultimate-reward-card">
             <div class="ultimate-inner">
                 <div class="iphone-halo">
-                    <img src="https://img.icons8.com/fluency/240/iphone-14-pro.png" class="iphone-img" alt="iPhone 17 Pro">
+                    <img src="https://img.icons8.com/fluency/240/iphone-14-pro.png" class="iphone-img" alt="iPhone">
                 </div>
                 <div>
                     <div class="inline-block px-2 py-1 bg-orange-500/20 rounded border border-orange-500/30 mb-2">
-                        <span class="text-[10px] text-orange-400 font-black tracking-widest uppercase">Secret Grand Prize</span>
+                        <span id="i18n-tag" class="text-[10px] text-orange-400 font-black tracking-widest uppercase">限定成就加碼</span>
                     </div>
-                    <h4 id="i18n-grand-title" class="gold-text-metallic text-2xl mb-2">50% vs 50% 則抽出 iPhone 17 Pro</h4>
-                    <p id="i18n-grand-desc" class="text-xs text-gray-400 leading-relaxed">
-                        若最終獎池比例達成 <span class="text-white font-bold italic">完美平衡</span>，我們將加碼抽出 Apple iPhone 17 Pro 給所有參與者！
+                    <h4 id="i18n-grand-title" class="gold-text-metallic text-xl mb-2 leading-tight">50% vs 50% 則抽出 iPhone 17 Pro</h4>
+                    <p id="i18n-grand-desc" class="text-[11px] text-gray-400 leading-relaxed">
+                        若最終比例達成完美平衡，將從全體用戶抽出 iPhone 17 Pro，原獎項不抽。
                     </p>
                 </div>
             </div>
@@ -195,39 +166,67 @@
         const i18n = {
             'zh-TW': {
                 mainTitle: 'VIP 專屬抽獎池',
-                btnA: 'Switch',
-                btnB: '鑽石',
+                btnA: 'Switch', btnB: '鑽石',
                 confirmMsg: '一經選擇則無法更改！你確定要投給',
-                rules: ['1. 選擇參與獎池', '2. 活動期間不可更改', '3. 結束後統計最終比例', '4. 僅抽比例最高之獎池', '5. 若 50/50 則加碼抽 iPhone 17 Pro'],
-                grandTitle: '50% : 50% 達成限定大獎',
-                grandDesc: '若最終比例為完美平衡，將從全體玩家中加碼抽出 iPhone 17 Pro 大獎！'
+                unit: '人',
+                tag: '限定成就加碼',
+                rules: [
+                    '1. 選擇參與獎池',
+                    '2. 活動期間不可更改選擇',
+                    '3. 結束後統計最終比例',
+                    '4. 投票比例不相同，則僅抽出比例最高獎池之投票名單',
+                    '5. 若最終比例為50% vs 50% 則從全體用戶抽出 iPhone 17 Pro，原獎項不抽'
+                ],
+                grandTitle: '50% vs 50% 則抽出 iPhone 17 Pro',
+                grandDesc: '若最終比例為完美平衡，將從全體用戶抽出 iPhone 17 Pro，原獎項不抽。'
             },
             'zh-CN': {
                 mainTitle: 'VIP 专属抽奖池',
-                btnA: 'Switch',
-                btnB: '钻石',
+                btnA: 'Switch', btnB: '钻石',
                 confirmMsg: '一经选择则无法更改！你确定要投给',
-                rules: ['1. 选择参与奖池', '2. 活动期间不可更改', '3. 结束后统计最终比例', '4. 仅抽比例最高之奖池', '5. 若 50/50 则加码抽 iPhone 17 Pro'],
-                grandTitle: '50% : 50% 达成限定大奖',
-                grandDesc: '若最终比例为完美平衡，将從全体玩家中加码抽出 iPhone 17 Pro 大奖！'
+                unit: '人',
+                tag: '限定成就加码',
+                rules: [
+                    '1. 选择参与奖池',
+                    '2. 活动期间不可更改选择',
+                    '3. 结束后统计最终比例',
+                    '4. 投票比例不相同，则仅抽出比例最高奖池之投票名单',
+                    '5. 若最终比例为50% vs 50% 则從全体用户抽出 iPhone 17 Pro，原奖项不抽'
+                ],
+                grandTitle: '50% vs 50% 则抽出 iPhone 17 Pro',
+                grandDesc: '若最终比例为完美平衡，将從全体用户抽出 iPhone 17 Pro，原奖项不抽。'
             },
             'en': {
                 mainTitle: 'VIP EXCLUSIVE POOL',
-                btnA: 'Switch',
-                btnB: 'Diamond',
-                confirmMsg: 'Cannot be changed! Vote for',
-                rules: ['1. Select your pool', '2. Cannot change after vote', '3. Stats counted at end', '4. Majority pool wins', '5. 50/50 unlocks iPhone 17 Pro'],
-                grandTitle: '50% : 50% UNLOCKS GRAND PRIZE',
-                grandDesc: 'If final stats reach a perfect balance, an iPhone 17 Pro will be awarded to all!'
+                btnA: 'Switch', btnB: 'Diamond',
+                confirmMsg: 'Final choice! Vote for',
+                unit: 'Votes',
+                tag: 'LIMITED ACHIEVEMENT',
+                rules: [
+                    '1. Select your desired prize pool.',
+                    '2. Choice cannot be changed.',
+                    '3. Final stats counted after event.',
+                    '4. If ratios differ, only the majority pool is drawn.',
+                    '5. If 50/50, iPhone 17 Pro is drawn from ALL users (original prizes void).'
+                ],
+                grandTitle: '50% vs 50% Unlocks iPhone 17 Pro',
+                grandDesc: 'If final ratios are perfectly balanced, iPhone 17 Pro will be drawn from all users.'
             },
             'ja': {
                 mainTitle: 'VIP 専用抽選プール',
-                btnA: 'Switch',
-                btnB: 'ダイヤモンド',
+                btnA: 'Switch', btnB: 'ダイヤモンド',
                 confirmMsg: '変更できません！本当に',
-                rules: ['1. プールを選択', '2. 選択後の変更不可', '3. 終了後に集計', '4. 比率が高い方を抽選', '5. 50/50 の場合 iPhone 17 Pro 抽選'],
-                grandTitle: '50% : 50% 達成限定大賞',
-                grandDesc: '最終比率が完全に一致した場合、全員の中から iPhone 17 Pro を抽選！'
+                unit: '人',
+                tag: '限定アチーブメント',
+                rules: [
+                    '1. 参加したいプールを選択。',
+                    '2. 選択後の変更は不可。',
+                    '3. 終了後に最終比率を集計。',
+                    '4. 比率が異なる場合、多数派のみが抽選対象。',
+                    '5. 50/50 の場合、全ユーザーから iPhone 17 Pro を抽選（元の賞品は無効）。'
+                ],
+                grandTitle: '50% vs 50% で iPhone 17 Pro 抽選',
+                grandDesc: '最終比率が完全に一致した場合、全ユーザーの中から iPhone 17 Pro を抽選します。'
             }
         };
 
@@ -242,11 +241,13 @@
             document.getElementById('i18n-main-title').innerText = d.mainTitle;
             document.getElementById('i18n-btn-a').innerText = '選擇 ' + d.btnA;
             document.getElementById('i18n-btn-b').innerText = '選擇 ' + d.btnB;
+            document.getElementById('i18n-tag').innerText = d.tag;
             document.getElementById('i18n-grand-title').innerText = d.grandTitle;
             document.getElementById('i18n-grand-desc').innerText = d.grandDesc;
             
             const list = document.getElementById('i18n-rules-list');
             list.innerHTML = d.rules.map(r => `<li>${r}</li>`).join('');
+            updateUI(); // 刷新人數單位
         }
 
         async function updateUI() {
@@ -257,12 +258,17 @@
                 document.getElementById('bar-b').style.width = data.B.percent + '%';
                 document.getElementById('percent-a').innerText = data.A.percent + '%';
                 document.getElementById('percent-b').innerText = data.B.percent + '%';
+                
+                // 更新人數
+                const unit = i18n[currentLang].unit;
+                document.getElementById('count-a').innerText = `${data.A.count.toLocaleString()} ${unit}`;
+                document.getElementById('count-b').innerText = `${data.B.count.toLocaleString()} ${unit}`;
             } catch (e) {}
         }
 
         async function castVote(choice) {
-            if (localStorage.getItem('voted_vip_2025')) {
-                alert('您已投票！');
+            if (localStorage.getItem('voted_vip_2025_v2')) {
+                alert(currentLang === 'en' ? 'Voted!' : '已投票！');
                 return;
             }
             const name = (choice === 'A') ? i18n[currentLang].btnA : i18n[currentLang].btnB;
@@ -272,15 +278,14 @@
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({choice})
                 });
-                localStorage.setItem('voted_vip_2025', 'true');
+                localStorage.setItem('voted_vip_2025_v2', 'true');
                 updateUI();
-                alert('投票成功！');
+                alert(currentLang === 'en' ? 'Success!' : '投票成功！');
             }
         }
 
         const navLang = navigator.language.includes('ja') ? 'ja' : navigator.language.includes('zh-CN') ? 'zh-CN' : navigator.language.includes('zh') ? 'zh-TW' : 'en';
         changeLang(navLang);
-        updateUI();
         setInterval(updateUI, 5000);
     </script>
 </body>
