@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIP 專屬抽獎池 - PREMIUM</title>
+    <title>VIP 專屬抽獎池 - ULTIMATE LUXURY</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --glass: rgba(255, 255, 255, 0.02);
             --gold-primary: #bf953f;
             --gold-light: #fcf6ba;
             --gold-dark: #aa771c;
@@ -23,91 +22,84 @@
             min-height: 100vh;
             display: flex; justify-content: center; align-items: center; padding: 20px;
             margin: 0;
+            overflow-x: hidden;
         }
 
-        /* 黑金標題：正體不斜體、超霸氣漸層 */
-        .title-gold {
+        /* --- 3D 極致立體標題 --- */
+        .title-3d {
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 0.15em;
-            background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-light) 45%, var(--gold-dark) 50%, var(--gold-light) 55%, var(--gold-primary) 100%);
+            letter-spacing: 0.1em;
+            background: linear-gradient(to bottom, var(--gold-light) 0%, var(--gold-primary) 50%, var(--gold-dark) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 15px rgba(191, 149, 63, 0.4));
+            text-align: center;
             line-height: 1.2;
+            text-shadow: 
+                0 1px 0 #888, 0 2px 0 #777, 0 3px 0 #666, 0 4px 0 #555, 0 5px 0 #444,
+                0 10px 20px rgba(0,0,0,0.9), 0 0 20px rgba(191, 149, 63, 0.4);
         }
 
-        /* 右上角下拉式選單語系 */
-        .lang-control {
-            position: fixed;
-            top: 1.5rem;
-            right: 1.5rem;
-            z-index: 9999;
-        }
-
+        /* 語系下拉選單 */
+        .lang-control { position: fixed; top: 1.5rem; right: 1.5rem; z-index: 9999; }
         .lang-select {
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid var(--gold-dark);
-            color: var(--gold-primary);
-            padding: 8px 30px 8px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: bold;
-            appearance: none; /* 移除原生箭頭 */
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            outline: none;
+            background: rgba(0, 0, 0, 0.85); border: 1px solid var(--gold-dark); color: var(--gold-primary);
+            padding: 8px 32px 8px 12px; border-radius: 8px; font-size: 12px; font-weight: bold;
+            appearance: none; cursor: pointer; outline: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23bf953f' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 10px center;
-            transition: 0.3s;
+            background-repeat: no-repeat; background-position: right 10px center;
         }
-        .lang-select:hover { border-color: var(--gold-light); box-shadow: 0 0 10px rgba(191, 149, 63, 0.3); }
 
-        /* 主卡片：黑金邊框 */
         .glass-card {
-            background: rgba(10, 10, 10, 0.85);
-            backdrop-filter: blur(50px);
-            border: 1px solid rgba(191, 149, 63, 0.25);
-            border-radius: 40px;
-            width: 100%; max-width: 650px; padding: 45px;
-            box-shadow: 0 50px 120px rgba(0,0,0,1);
-            position: relative;
+            background: rgba(10, 10, 10, 0.9); border: 1px solid rgba(191, 149, 63, 0.25);
+            border-radius: 40px; width: 100%; max-width: 650px; padding: 45px;
+            box-shadow: 0 40px 100px rgba(0,0,0,1); position: relative;
         }
 
-        /* 勝出者皇冠 */
+        /* 皇冠移動動畫 */
         .crown-icon {
-            position: absolute;
-            top: -55px; left: 50%; transform: translateX(-50%);
-            width: 65px; height: 65px;
-            filter: drop-shadow(0 0 15px var(--gold-primary));
-            z-index: 30; display: none;
-            animation: crownBounce 2.5s infinite ease-in-out;
+            position: absolute; top: -55px; left: 50%; transform: translateX(-50%);
+            width: 60px; height: 60px; filter: drop-shadow(0 0 15px var(--gold-primary));
+            z-index: 30; display: none; animation: crownBounce 2.5s infinite ease-in-out;
         }
         @keyframes crownBounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-15px); } }
 
-        /* 規則框 */
-        .rule-box-gold {
-            background: rgba(191, 149, 63, 0.04);
-            border: 1px dashed rgba(191, 149, 63, 0.2);
-            padding: 24px; border-radius: 20px; margin-bottom: 40px;
-        }
-
-        /* 下層：數據 Bar 與 % */
+        /* 進度條 */
         .progress-container { height: 68px; background: #000; border-radius: 24px; position: relative; overflow: hidden; border: 1px solid rgba(191, 149, 63, 0.3); display: flex; }
-        .bar-a { background: linear-gradient(90deg, #80001a, var(--accent-a)); transition: width 1.2s cubic-bezier(0.23, 1, 0.32, 1); display: flex; align-items: center; justify-content: center; }
-        .bar-b { background: linear-gradient(90deg, var(--accent-b), #003366); transition: width 1.2s cubic-bezier(0.23, 1, 0.32, 1); display: flex; align-items: center; justify-content: center; }
-        .percent-text { font-weight: 900; font-size: 1.6rem; text-shadow: 0 2px 10px rgba(0,0,0,0.8); color: #fff; }
+        .bar-a { background: linear-gradient(90deg, #80001a, var(--accent-a)); transition: width 1s cubic-bezier(0.23, 1, 0.32, 1); display: flex; align-items: center; justify-content: center; }
+        .bar-b { background: linear-gradient(90deg, var(--accent-b), #003366); transition: width 1s cubic-bezier(0.23, 1, 0.32, 1); display: flex; align-items: center; justify-content: center; }
+        .percent-text { font-weight: 900; font-size: 1.6rem; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
         .vs-label { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: var(--gold-light); color: #000; font-weight: 900; padding: 3px 14px; border-radius: 6px; font-size: 13px; z-index: 10; }
 
-        /* 按鈕視覺 */
+        /* 投票按鈕樣式 */
         .btn-gold-themed { border-radius: 20px; font-weight: 900; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; transition: 0.4s; border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; }
         .btn-a-crimson { background: linear-gradient(145deg, #a8001d, #4d000e); color: #fff; border-color: #ff2d55; }
-        .btn-a-crimson:hover { box-shadow: 0 0 25px rgba(255, 45, 85, 0.5); transform: translateY(-3px); }
+        .btn-a-crimson:hover { box-shadow: 0 0 20px rgba(255, 45, 85, 0.5); transform: translateY(-3px); }
         .btn-b-royal { background: linear-gradient(145deg, #004fb0, #001d4d); color: #fff; border-color: #007aff; }
-        .btn-b-royal:hover { box-shadow: 0 0 25px rgba(0, 122, 255, 0.5); transform: translateY(-3px); }
+        .btn-b-royal:hover { box-shadow: 0 0 20px rgba(0, 122, 255, 0.5); transform: translateY(-3px); }
 
-        /* 限定成就區 */
+        /* --- 自定義確認驗證框 (Modal) --- */
+        #voteModal {
+            display: none; position: fixed; inset: 0; z-index: 10000;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
+            align-items: center; justify-content: center; padding: 20px;
+        }
+        .modal-content {
+            background: #0d0d0d; border: 1px solid var(--gold-primary); border-radius: 30px;
+            padding: 40px; max-width: 400px; width: 100%; text-align: center;
+            box-shadow: 0 0 50px rgba(191, 149, 63, 0.3);
+        }
+        .modal-btn-yes {
+            background: var(--gold-primary); color: #000; font-weight: 900; padding: 12px 30px;
+            border-radius: 12px; cursor: pointer; transition: 0.3s;
+        }
+        .modal-btn-yes:hover { background: var(--gold-light); transform: scale(1.05); }
+        .modal-btn-no {
+            background: rgba(255,255,255,0.05); color: #888; font-weight: bold; padding: 12px 30px;
+            border-radius: 12px; cursor: pointer; transition: 0.3s; margin-right: 15px;
+        }
+        .modal-btn-no:hover { color: #fff; background: rgba(255,255,255,0.1); }
+
         .ultimate-card { position: relative; background: rgba(191, 149, 63, 0.1); border-radius: 35px; padding: 3px; overflow: hidden; margin-top: 50px; }
         .ultimate-card::before { content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, transparent, transparent, var(--gold-primary)); animation: rotate 4s linear infinite; }
         .ultimate-inner { position: relative; z-index: 1; background: #080808; border-radius: 33px; padding: 25px; display: flex; align-items: center; gap: 25px; }
@@ -117,7 +109,7 @@
 </head>
 <body>
 
-    <!-- 下拉式語系選擇器 -->
+    <!-- 語系下拉選單 -->
     <div class="lang-control">
         <select class="lang-select" onchange="changeLang(this.value)" id="langDropdown">
             <option value="zh-TW">繁體中文</option>
@@ -127,53 +119,64 @@
         </select>
     </div>
 
+    <!-- 自定義驗證彈窗 -->
+    <div id="voteModal">
+        <div class="modal-content">
+            <h2 id="i18n-modal-title" class="text-2xl font-black text-[#fcf6ba] mb-4">確認投票嗎？</h2>
+            <p id="i18n-modal-msg" class="text-sm text-gray-400 mb-8 leading-relaxed">投票後不得更改選項，確認投票嗎？</p>
+            <div class="flex justify-center">
+                <button onclick="closeModal()" id="i18n-modal-no" class="modal-btn-no">否</button>
+                <button onclick="confirmVote()" id="i18n-modal-yes" class="modal-btn-yes">是</button>
+            </div>
+        </div>
+    </div>
+
     <div class="glass-card">
-        <!-- 勝出者皇冠 SVG -->
+        <!-- 勝出者皇冠 -->
         <svg id="crown" class="crown-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M5 21H19V19H5V21ZM5 17H19V11L15 13L12 7L9 13L5 11V17ZM12 5C13.1046 5 14 4.10457 14 3C14 1.89543 13.1046 1 12 1C10.8954 1 10 1.89543 10 3C10 4.10457 10.8954 5 12 5Z" fill="#ffb100"/>
         </svg>
 
         <header class="text-center mb-10">
-            <h1 id="i18n-main-title" class="title-gold text-5xl md:text-6xl mb-8">VIP 專屬抽獎池</h1>
-            <div class="rule-box-gold text-left">
+            <h1 id="i18n-main-title" class="title-3d text-5xl md:text-6xl mb-12">VIP 專屬抽獎池</h1>
+            <div class="bg-white/5 border border-white/10 p-5 rounded-2xl text-left">
                 <h3 id="i18n-rule-header" class="text-[10px] font-bold text-[#fcf6ba] tracking-[0.3em] uppercase mb-3">Activity Rules / 活動規則</h3>
                 <ul id="i18n-rules-list" class="text-[11px] text-gray-400 space-y-2 font-light leading-relaxed"></ul>
             </div>
         </header>
 
-        <!-- 【上層】對決圖片區域 -->
-        <div class="grid grid-cols-2 gap-8 mb-16">
-            <div id="container-a" class="relative text-center">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Nintendo_Switch_Console.png/640px-Nintendo_Switch_Console.png" class="h-32 mx-auto mb-4 object-contain" alt="Switch">
-                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Team Switch</p>
-            </div>
-            <div id="container-b" class="relative text-center">
-                <img src="https://www.freeiconspng.com/uploads/diamond-png-21.png" class="h-32 mx-auto mb-4 object-contain" alt="Diamond">
-                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Team Diamond</p>
-            </div>
-        </div>
-
-        <!-- 【下層】數據、進度與按鈕 -->
-        <div class="mb-6">
-            <!-- 進度條 -->
+        <!-- 【上層】數據 Bar 與人數 -->
+        <div class="mb-10 pt-4">
             <div class="progress-container mb-3">
                 <div id="bar-a" class="bar-a" style="width: 50%"><span id="percent-a" class="percent-text">50%</span></div>
                 <div id="bar-b" class="bar-b" style="width: 50%"><span id="percent-b" class="percent-text">50%</span></div>
                 <div class="vs-label">VS</div>
             </div>
-            <!-- 人數統計 -->
-            <div class="flex justify-between px-3 mb-10 text-[10px] font-black text-gray-500 tracking-[0.2em] uppercase">
+            <div class="flex justify-between px-3 text-[10px] font-black text-gray-500 tracking-[0.2em] uppercase">
                 <span id="count-a">0 人已投票</span>
                 <span id="count-b">0 人已投票</span>
             </div>
-            <!-- 選擇按鈕 -->
-            <div class="grid grid-cols-2 gap-4">
-                <button id="i18n-btn-a" onclick="castVote('A')" class="btn-gold-themed btn-a-crimson py-4">選擇 Switch</button>
-                <button id="i18n-btn-b" onclick="castVote('B')" class="btn-gold-themed btn-b-royal py-4">選擇 鑽石</button>
+        </div>
+
+        <!-- 【中層】獎項圖片 -->
+        <div class="grid grid-cols-2 gap-8 mb-12">
+            <div id="container-a" class="relative text-center">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Nintendo_Switch_Console.png/640px-Nintendo_Switch_Console.png" class="h-28 mx-auto mb-4 object-contain" alt="Switch">
+                <p class="text-[10px] text-gray-600 font-bold tracking-widest uppercase">Team Switch</p>
+            </div>
+            <div id="container-b" class="relative text-center">
+                <img src="https://www.freeiconspng.com/uploads/diamond-png-21.png" class="h-28 mx-auto mb-4 object-contain" alt="Diamond">
+                <p class="text-[10px] text-gray-600 font-bold tracking-widest uppercase">Team Diamond</p>
             </div>
         </div>
 
-        <!-- 限定成就加碼區 -->
+        <!-- 【下層】選擇按鈕 -->
+        <div class="grid grid-cols-2 gap-4">
+            <button id="i18n-btn-a" onclick="openVoteModal('A')" class="btn-gold-themed btn-a-crimson py-4">選擇 Switch</button>
+            <button id="i18n-btn-b" onclick="openVoteModal('B')" class="btn-gold-themed btn-b-royal py-4">選擇 鑽石</button>
+        </div>
+
+        <!-- 加碼區 -->
         <div class="ultimate-card">
             <div class="ultimate-inner">
                 <div class="flex-shrink-0 relative">
@@ -192,12 +195,15 @@
     </div>
 
     <script>
+        // 初始模擬數據
+        const MOCK_BASE = { A: 2542, B: 2498 };
+        let selectedChoice = null;
+
         const i18n = {
             'zh-TW': {
-                mainTitle: 'VIP 專屬抽獎池',
-                btnA: 'Switch', btnB: '鑽石',
-                confirmMsg: '一經選擇則無法更改！你確定要投給',
-                votedSuffix: '人已投票', tag: '限定成就加碼',
+                mainTitle: 'VIP 專屬抽獎池', btnA: 'Switch', btnB: '鑽石',
+                modalTitle: '確認投票嗎？', modalMsg: '投票後不得更改選項，確認投票嗎？',
+                modalYes: '是', modalNo: '否', votedSuffix: '人已投票', tag: '限定成就加碼',
                 rules: [
                     '1. 選擇參與獎池，若選擇的獎項為多數則抽取投票該獎項用戶',
                     '2. 活動期間不可任意更改選擇',
@@ -209,10 +215,9 @@
                 grandDesc: '若最終比例為完美平衡，將從全體用戶抽出 iPhone 17 Pro，原獎項不抽。'
             },
             'zh-CN': {
-                mainTitle: 'VIP 专属抽奖池',
-                btnA: 'Switch', btnB: '钻石',
-                confirmMsg: '一经选择则无法更改！你确定要投给',
-                votedSuffix: '人已投票', tag: '限定成就加码',
+                mainTitle: 'VIP 专属抽奖池', btnA: 'Switch', btnB: '钻石',
+                modalTitle: '确认投票吗？', modalMsg: '投票后不得更改选项，确认投票吗？',
+                modalYes: '是', modalNo: '否', votedSuffix: '人已投票', tag: '限定成就加码',
                 rules: [
                     '1. 选择参与奖池，若选择的奖项为多数则抽取投票该奖项用户',
                     '2. 活动期间不可任意更改选择',
@@ -224,107 +229,101 @@
                 grandDesc: '若最终比例为完美平衡，将從全体用户抽出 iPhone 17 Pro，原奖项不抽。'
             },
             'en': {
-                mainTitle: 'VIP EXCLUSIVE POOL',
-                btnA: 'Switch', btnB: 'Diamond',
-                confirmMsg: 'Choice is final! Vote for',
-                votedSuffix: 'People Voted', tag: 'LIMITED ACHIEVEMENT',
+                mainTitle: 'VIP EXCLUSIVE POOL', btnA: 'Switch', btnB: 'Diamond',
+                modalTitle: 'Confirm Vote?', modalMsg: 'Once selected, you cannot change your choice. Continue?',
+                modalYes: 'YES', modalNo: 'NO', votedSuffix: 'People Voted', tag: 'LIMITED ACHIEVEMENT',
                 rules: [
                     '1. Choose a pool; majority winners enter the draw.',
                     '2. Selection cannot be changed.',
-                    '3. Final ratios counted at the end.',
+                    '3. Ratios counted after the event.',
                     '4. Only the majority side enters the lucky draw.',
-                    '5. If 50/50, iPhone 17 Pro for all (original prizes void).'
+                    '5. If 50/50, iPhone 17 Pro for ALL users.'
                 ],
                 grandTitle: '50% vs 50% Unlocks iPhone 17 Pro',
                 grandDesc: 'If final ratios are balanced, iPhone 17 Pro will be drawn from all users.'
             },
             'ja': {
-                mainTitle: 'VIP 専用抽選プール',
-                btnA: 'Switch', btnB: 'ダイヤモンド',
-                confirmMsg: '変更できません！本当に',
-                votedSuffix: '人が投票済み', tag: '限定アチーブメント',
+                mainTitle: 'VIP 専用抽選プール', btnA: 'Switch', btnB: 'ダイヤモンド',
+                modalTitle: '投票しますか？', modalMsg: '一度選択すると変更できません。よろしいですか？',
+                modalYes: 'はい', modalNo: 'いいえ', votedSuffix: '人が投票済み', tag: '限定アチーブメント',
                 rules: [
-                    '1. プールを選択。多数派のプールからのみ抽選が行われます。',
+                    '1. 多数派のプールからのみ抽選が行われます。',
                     '2. 選択後の変更は不可。',
-                    '3. 終了後に集計。',
+                    '3. 終了後に集計されます。',
                     '4. 比率が高いプールからのみ抽選。',
                     '5. 50/50 の場合、全ユーザーから iPhone 17 Pro を抽選。'
                 ],
                 grandTitle: '50% vs 50% で iPhone 17 Pro 抽選',
-                grandDesc: '最終比率が一致した場合、全員の中から iPhone 17 Pro を抽選します。'
+                grandDesc: '比率が一致した場合、全員の中から iPhone 17 Pro を抽選します。'
             }
         };
 
-        let currentLang = 'zh-TW';
-        const API_BASE = ''; 
-
         function changeLang(lang) {
-            currentLang = lang;
-            document.getElementById('langDropdown').value = lang;
-            
             const d = i18n[lang];
             document.getElementById('i18n-main-title').innerText = d.mainTitle;
             document.getElementById('i18n-btn-a').innerText = '選擇 ' + d.btnA;
             document.getElementById('i18n-btn-b').innerText = '選擇 ' + d.btnB;
+            document.getElementById('i18n-modal-title').innerText = d.modalTitle;
+            document.getElementById('i18n-modal-msg').innerText = d.modalMsg;
+            document.getElementById('i18n-modal-yes').innerText = d.modalYes;
+            document.getElementById('i18n-modal-no').innerText = d.modalNo;
             document.getElementById('i18n-tag').innerText = d.tag;
             document.getElementById('i18n-grand-title').innerText = d.grandTitle;
             document.getElementById('i18n-grand-desc').innerText = d.grandDesc;
             const list = document.getElementById('i18n-rules-list');
             list.innerHTML = d.rules.map(r => `<li>${r}</li>`).join('');
-            updateUI();
+            updateUI(lang);
         }
 
-        async function updateUI() {
-            try {
-                const res = await fetch(`${API_BASE}/api/votes`);
-                const data = await res.json();
-                document.getElementById('bar-a').style.width = data.A.percent + '%';
-                document.getElementById('bar-b').style.width = data.B.percent + '%';
-                document.getElementById('percent-a').innerText = data.A.percent + '%';
-                document.getElementById('percent-b').innerText = data.B.percent + '%';
-                
-                const suffix = i18n[currentLang].votedSuffix;
-                document.getElementById('count-a').innerText = `${data.A.count.toLocaleString()} ${suffix}`;
-                document.getElementById('count-b').innerText = `${data.B.count.toLocaleString()} ${suffix}`;
+        function updateUI(lang = document.getElementById('langDropdown').value) {
+            const userVote = localStorage.getItem('voted_vip_2025_local');
+            let countA = MOCK_BASE.A + (userVote === 'A' ? 1 : 0);
+            let countB = MOCK_BASE.B + (userVote === 'B' ? 1 : 0);
+            let total = countA + countB;
+            let pA = Math.round((countA / total) * 1000) / 10;
+            let pB = Math.round((100 - pA) * 10) / 10;
 
-                const crown = document.getElementById('crown');
-                if (data.A.count === data.B.count) {
-                    crown.style.display = 'none';
-                } else {
-                    crown.style.display = 'block';
-                    const targetId = data.A.count > data.B.count ? 'container-a' : 'container-b';
-                    document.getElementById(targetId).appendChild(crown);
-                }
-            } catch (e) { console.error("Sync error:", e); }
+            document.getElementById('bar-a').style.width = pA + '%';
+            document.getElementById('bar-b').style.width = pB + '%';
+            document.getElementById('percent-a').innerText = pA + '%';
+            document.getElementById('percent-b').innerText = pB + '%';
+            
+            const suffix = i18n[lang].votedSuffix;
+            document.getElementById('count-a').innerText = `${countA.toLocaleString()} ${suffix}`;
+            document.getElementById('count-b').innerText = `${countB.toLocaleString()} ${suffix}`;
+
+            const crown = document.getElementById('crown');
+            if (countA === countB) { crown.style.display = 'none'; }
+            else {
+                crown.style.display = 'block';
+                const targetId = countA > countB ? 'container-a' : 'container-b';
+                document.getElementById(targetId).appendChild(crown);
+            }
         }
 
-        async function castVote(choice) {
-            if (localStorage.getItem('voted_vip_vFINAL_2025')) {
-                alert(currentLang === 'en' ? 'Already Voted!' : '您已經選擇過囉！');
+        function openVoteModal(choice) {
+            if (localStorage.getItem('voted_vip_2025_local')) {
+                alert('您已經投票過了！');
                 return;
             }
-            const name = (choice === 'A') ? i18n[currentLang].btnA : i18n[currentLang].btnB;
-            if (window.confirm(`${i18n[currentLang].confirmMsg} 【${name}】 嗎？`)) {
-                try {
-                    const res = await fetch(`${API_BASE}/api/vote`, {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({choice})
-                    });
-                    if (res.ok) {
-                        localStorage.setItem('voted_vip_vFINAL_2025', 'true');
-                        updateUI();
-                    }
-                } catch (e) { alert("Error connecting to server."); }
-            }
+            selectedChoice = choice;
+            document.getElementById('voteModal').style.display = 'flex';
         }
 
-        // 自動檢測瀏覽器語系並初始化
-        const navLang = navigator.language.includes('ja') ? 'ja' : 
-                        navigator.language.includes('zh-CN') ? 'zh-CN' : 
-                        navigator.language.includes('zh') ? 'zh-TW' : 'en';
+        function closeModal() {
+            document.getElementById('voteModal').style.display = 'none';
+        }
+
+        function confirmVote() {
+            localStorage.setItem('voted_vip_2025_local', selectedChoice);
+            closeModal();
+            updateUI();
+            alert('投票成功！');
+        }
+
+        const navLang = navigator.language.includes('ja') ? 'ja' : navigator.language.includes('zh-CN') ? 'zh-CN' : navigator.language.includes('zh') ? 'zh-TW' : 'en';
+        document.getElementById('langDropdown').value = navLang;
         changeLang(navLang);
-        setInterval(updateUI, 5000);
     </script>
 </body>
 </html>
