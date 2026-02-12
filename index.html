@@ -3,147 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIP 專屬抽獎池</title>
+    <title>VIP 專屬抽獎池 - PREMIUM</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass: rgba(255, 255, 255, 0.02);
+            --gold-primary: #bf953f;
+            --gold-light: #fcf6ba;
+            --gold-dark: #aa771c;
             --accent-a: #ff2d55;
             --accent-b: #007aff;
-            --gold: #ffb100;
         }
 
         body {
-            background: radial-gradient(circle at 50% 0%, #1a1a2e 0%, #050505 100%);
+            background: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #000000 100%);
             color: #fff;
             font-family: 'Inter', 'Noto Sans TC', sans-serif;
             min-height: 100vh;
             display: flex; justify-content: center; align-items: center; padding: 20px;
+            margin: 0;
         }
 
-        /* 標題特效：極致顯眼 */
-        .title-hero {
+        /* 黑金標題：正體不斜體、超霸氣漸層 */
+        .title-gold {
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            background: linear-gradient(to bottom, #ffffff 30%, #cccccc 60%, #888888 100%);
+            letter-spacing: 0.15em;
+            background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-light) 45%, var(--gold-dark) 50%, var(--gold-light) 55%, var(--gold-primary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            /* 加入微光外溢效果 */
-            filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));
+            filter: drop-shadow(0 0 15px rgba(191, 149, 63, 0.4));
             line-height: 1.2;
         }
 
-        /* 語系切換 */
-        .lang-control { position: fixed; top: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; gap: 0.5rem; }
-        .lang-btn { background: var(--glass); border: 1px solid var(--glass-border); backdrop-filter: blur(10px); padding: 6px 12px; font-size: 11px; color: rgba(255,255,255,0.4); border-radius: 6px; cursor: pointer; transition: 0.3s; }
-        .lang-btn.active { color: #fff; border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.15); }
+        /* 右上角下拉式選單語系 */
+        .lang-control {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 9999;
+        }
 
+        .lang-select {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--gold-dark);
+            color: var(--gold-primary);
+            padding: 8px 30px 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            appearance: none; /* 移除原生箭頭 */
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            outline: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23bf953f' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            transition: 0.3s;
+        }
+        .lang-select:hover { border-color: var(--gold-light); box-shadow: 0 0 10px rgba(191, 149, 63, 0.3); }
+
+        /* 主卡片：黑金邊框 */
         .glass-card {
-            background: var(--glass);
-            backdrop-filter: blur(40px);
-            border: 1px solid var(--glass-border);
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(50px);
+            border: 1px solid rgba(191, 149, 63, 0.25);
             border-radius: 40px;
-            width: 100%; max-width: 650px; padding: 40px;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            width: 100%; max-width: 650px; padding: 45px;
+            box-shadow: 0 50px 120px rgba(0,0,0,1);
             position: relative;
         }
 
-        /* 皇冠動畫 */
+        /* 勝出者皇冠 */
         .crown-icon {
             position: absolute;
-            top: -45px; left: 50%;
-            transform: translateX(-50%);
-            width: 55px; height: 55px;
-            filter: drop-shadow(0 0 15px var(--gold));
-            z-index: 20;
-            display: none;
+            top: -55px; left: 50%; transform: translateX(-50%);
+            width: 65px; height: 65px;
+            filter: drop-shadow(0 0 15px var(--gold-primary));
+            z-index: 30; display: none;
             animation: crownBounce 2.5s infinite ease-in-out;
         }
-        @keyframes crownBounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-12px); } }
+        @keyframes crownBounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-15px); } }
 
-        /* 按鈕視覺 */
-        .btn-premium { border-radius: 20px; font-weight: 900; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; transition: 0.4s; border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); }
-        .btn-a { background: linear-gradient(145deg, rgba(255, 45, 85, 0.2), rgba(128, 0, 26, 0.6)); color: #ffbaba; }
-        .btn-a:hover { background: rgba(255, 45, 85, 0.6); color: #fff; box-shadow: 0 0 20px rgba(255, 45, 85, 0.4); transform: translateY(-3px); }
-        .btn-b { background: linear-gradient(145deg, rgba(0, 122, 255, 0.2), rgba(0, 51, 102, 0.6)); color: #bad9ff; }
-        .btn-b:hover { background: rgba(0, 122, 255, 0.6); color: #fff; box-shadow: 0 0 20px rgba(0, 122, 255, 0.4); transform: translateY(-3px); }
+        /* 規則框 */
+        .rule-box-gold {
+            background: rgba(191, 149, 63, 0.04);
+            border: 1px dashed rgba(191, 149, 63, 0.2);
+            padding: 24px; border-radius: 20px; margin-bottom: 40px;
+        }
 
-        /* 進度條 */
-        .progress-container { height: 64px; background: rgba(0,0,0,0.8); border-radius: 22px; position: relative; overflow: hidden; border: 1px solid var(--glass-border); display: flex; }
+        /* 下層：數據 Bar 與 % */
+        .progress-container { height: 68px; background: #000; border-radius: 24px; position: relative; overflow: hidden; border: 1px solid rgba(191, 149, 63, 0.3); display: flex; }
         .bar-a { background: linear-gradient(90deg, #80001a, var(--accent-a)); transition: width 1.2s cubic-bezier(0.23, 1, 0.32, 1); display: flex; align-items: center; justify-content: center; }
         .bar-b { background: linear-gradient(90deg, var(--accent-b), #003366); transition: width 1.2s cubic-bezier(0.23, 1, 0.32, 1); display: flex; align-items: center; justify-content: center; }
-        .percent-text { font-weight: 900; font-size: 1.5rem; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-        .vs-label { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: #fff; color: #000; font-weight: 900; padding: 2px 12px; border-radius: 6px; font-size: 12px; z-index: 10; }
+        .percent-text { font-weight: 900; font-size: 1.6rem; text-shadow: 0 2px 10px rgba(0,0,0,0.8); color: #fff; }
+        .vs-label { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: var(--gold-light); color: #000; font-weight: 900; padding: 3px 14px; border-radius: 6px; font-size: 13px; z-index: 10; }
+
+        /* 按鈕視覺 */
+        .btn-gold-themed { border-radius: 20px; font-weight: 900; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; transition: 0.4s; border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; }
+        .btn-a-crimson { background: linear-gradient(145deg, #a8001d, #4d000e); color: #fff; border-color: #ff2d55; }
+        .btn-a-crimson:hover { box-shadow: 0 0 25px rgba(255, 45, 85, 0.5); transform: translateY(-3px); }
+        .btn-b-royal { background: linear-gradient(145deg, #004fb0, #001d4d); color: #fff; border-color: #007aff; }
+        .btn-b-royal:hover { box-shadow: 0 0 25px rgba(0, 122, 255, 0.5); transform: translateY(-3px); }
 
         /* 限定成就區 */
-        .ultimate-reward-card { position: relative; background: rgba(255, 177, 0, 0.03); border-radius: 32px; padding: 3px; overflow: hidden; margin-top: 40px; }
-        .ultimate-reward-card::before { content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, transparent, transparent, var(--gold)); animation: rotate 4s linear infinite; }
-        .ultimate-inner { position: relative; z-index: 1; background: #0a0a0a; border-radius: 30px; padding: 24px; display: flex; align-items: center; gap: 24px; }
+        .ultimate-card { position: relative; background: rgba(191, 149, 63, 0.1); border-radius: 35px; padding: 3px; overflow: hidden; margin-top: 50px; }
+        .ultimate-card::before { content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, transparent, transparent, var(--gold-primary)); animation: rotate 4s linear infinite; }
+        .ultimate-inner { position: relative; z-index: 1; background: #080808; border-radius: 33px; padding: 25px; display: flex; align-items: center; gap: 25px; }
         @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .gold-text-metallic { background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fcf6ba 55%, #aa771c 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; }
+        .metallic-text { background: linear-gradient(to bottom, #bf953f 0%, #fcf6ba 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; }
     </style>
 </head>
 <body>
 
+    <!-- 下拉式語系選擇器 -->
     <div class="lang-control">
-        <button class="lang-btn" onclick="changeLang('zh-TW')" id="btn-zh-TW">繁</button>
-        <button class="lang-btn" onclick="changeLang('zh-CN')" id="btn-zh-CN">简</button>
-        <button class="lang-btn" onclick="changeLang('en')" id="btn-en">EN</button>
-        <button class="lang-btn" onclick="changeLang('ja')" id="btn-ja">JP</button>
+        <select class="lang-select" onchange="changeLang(this.value)" id="langDropdown">
+            <option value="zh-TW">繁體中文</option>
+            <option value="zh-CN">简体中文</option>
+            <option value="en">English</option>
+            <option value="ja">日本語</option>
+        </select>
     </div>
 
     <div class="glass-card">
-        <!-- 皇冠 SVG -->
+        <!-- 勝出者皇冠 SVG -->
         <svg id="crown" class="crown-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M5 21H19V19H5V21ZM5 17H19V11L15 13L12 7L9 13L5 11V17ZM12 5C13.1046 5 14 4.10457 14 3C14 1.89543 13.1046 1 12 1C10.8954 1 10 1.89543 10 3C10 4.10457 10.8954 5 12 5Z" fill="#ffb100"/>
         </svg>
 
         <header class="text-center mb-10">
-            <!-- 強化版標題 -->
-            <h1 id="i18n-main-title" class="title-hero text-5xl md:text-6xl mb-10">VIP 專屬抽獎池</h1>
-            
-            <div class="text-left border border-white/10 p-5 rounded-2xl bg-white/5">
-                <h3 id="i18n-rule-header" class="text-[10px] font-bold text-orange-400 tracking-[0.3em] uppercase mb-3">Event Rules / 活動規則</h3>
+            <h1 id="i18n-main-title" class="title-gold text-5xl md:text-6xl mb-8">VIP 專屬抽獎池</h1>
+            <div class="rule-box-gold text-left">
+                <h3 id="i18n-rule-header" class="text-[10px] font-bold text-[#fcf6ba] tracking-[0.3em] uppercase mb-3">Activity Rules / 活動規則</h3>
                 <ul id="i18n-rules-list" class="text-[11px] text-gray-400 space-y-2 font-light leading-relaxed"></ul>
             </div>
         </header>
 
-        <div class="grid grid-cols-2 gap-8 mb-12">
+        <!-- 【上層】對決圖片區域 -->
+        <div class="grid grid-cols-2 gap-8 mb-16">
             <div id="container-a" class="relative text-center">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Nintendo_Switch_Console.png/640px-Nintendo_Switch_Console.png" class="h-28 mx-auto mb-6 object-contain" alt="Switch">
-                <button id="i18n-btn-a" onclick="castVote('A')" class="btn-premium btn-a w-full py-4 uppercase">選擇 Switch</button>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Nintendo_Switch_Console.png/640px-Nintendo_Switch_Console.png" class="h-32 mx-auto mb-4 object-contain" alt="Switch">
+                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Team Switch</p>
             </div>
             <div id="container-b" class="relative text-center">
-                <img src="https://www.freeiconspng.com/uploads/diamond-png-21.png" class="h-28 mx-auto mb-6 object-contain" alt="Diamond">
-                <button id="i18n-btn-b" onclick="castVote('B')" class="btn-premium btn-b w-full py-4 uppercase">選擇 鑽石</button>
+                <img src="https://www.freeiconspng.com/uploads/diamond-png-21.png" class="h-32 mx-auto mb-4 object-contain" alt="Diamond">
+                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Team Diamond</p>
             </div>
         </div>
 
-        <div class="progress-container mb-3">
-            <div id="bar-a" class="bar-a" style="width: 50%"><span id="percent-a" class="percent-text">50%</span></div>
-            <div id="bar-b" class="bar-b" style="width: 50%"><span id="percent-b" class="percent-text">50%</span></div>
-            <div class="vs-label">VS</div>
-        </div>
-        
-        <div class="flex justify-between px-3 mb-10 text-[10px] font-black text-gray-500 tracking-widest uppercase">
-            <span id="count-a">0 人已投票</span>
-            <span id="count-b">0 人已投票</span>
+        <!-- 【下層】數據、進度與按鈕 -->
+        <div class="mb-6">
+            <!-- 進度條 -->
+            <div class="progress-container mb-3">
+                <div id="bar-a" class="bar-a" style="width: 50%"><span id="percent-a" class="percent-text">50%</span></div>
+                <div id="bar-b" class="bar-b" style="width: 50%"><span id="percent-b" class="percent-text">50%</span></div>
+                <div class="vs-label">VS</div>
+            </div>
+            <!-- 人數統計 -->
+            <div class="flex justify-between px-3 mb-10 text-[10px] font-black text-gray-500 tracking-[0.2em] uppercase">
+                <span id="count-a">0 人已投票</span>
+                <span id="count-b">0 人已投票</span>
+            </div>
+            <!-- 選擇按鈕 -->
+            <div class="grid grid-cols-2 gap-4">
+                <button id="i18n-btn-a" onclick="castVote('A')" class="btn-gold-themed btn-a-crimson py-4">選擇 Switch</button>
+                <button id="i18n-btn-b" onclick="castVote('B')" class="btn-gold-themed btn-b-royal py-4">選擇 鑽石</button>
+            </div>
         </div>
 
-        <div class="ultimate-reward-card">
+        <!-- 限定成就加碼區 -->
+        <div class="ultimate-card">
             <div class="ultimate-inner">
-                <div class="iphone-halo">
-                    <img src="https://img.icons8.com/fluency/240/iphone-14-pro.png" class="w-20 z-10" alt="iPhone">
+                <div class="flex-shrink-0 relative">
+                    <img src="https://img.icons8.com/fluency/240/iphone-14-pro.png" class="w-20 z-10 relative animate-bounce" style="animation-duration: 3s;" alt="iPhone">
+                    <div class="absolute inset-0 bg-yellow-500/20 blur-2xl rounded-full"></div>
                 </div>
                 <div>
-                    <div class="inline-block px-2 py-1 bg-orange-500/10 rounded border border-orange-500/30 mb-2">
-                        <span id="i18n-tag" class="text-[10px] text-orange-400 font-black tracking-[0.2em] uppercase">限定成就加碼</span>
+                    <div class="inline-block px-2 py-1 bg-yellow-500/10 rounded border border-yellow-500/30 mb-2">
+                        <span id="i18n-tag" class="text-[10px] text-yellow-500 font-black tracking-[0.2em] uppercase">限定成就加碼</span>
                     </div>
-                    <h4 id="i18n-grand-title" class="gold-text-metallic text-lg mb-2 leading-tight">50% vs 50% 則抽出 iPhone 17 Pro</h4>
-                    <p id="i18n-grand-desc" class="text-[10px] text-gray-400 leading-relaxed font-light"></p>
+                    <h4 id="i18n-grand-title" class="metallic-text text-xl mb-1 leading-tight">50% vs 50% 則抽出 iPhone 17 Pro</h4>
+                    <p id="i18n-grand-desc" class="text-[10px] text-gray-500 leading-relaxed font-light"></p>
                 </div>
             </div>
         </div>
@@ -184,14 +226,14 @@
             'en': {
                 mainTitle: 'VIP EXCLUSIVE POOL',
                 btnA: 'Switch', btnB: 'Diamond',
-                confirmMsg: 'Final choice! Vote for',
+                confirmMsg: 'Choice is final! Vote for',
                 votedSuffix: 'People Voted', tag: 'LIMITED ACHIEVEMENT',
                 rules: [
-                    '1. Choose a pool; if majority wins, participants in that pool enter draw.',
+                    '1. Choose a pool; majority winners enter the draw.',
                     '2. Selection cannot be changed.',
-                    '3. Final stats calculated after event.',
-                    '4. Majority pool wins the draw.',
-                    '5. If 50/50, iPhone 17 Pro for ALL (original prizes void).'
+                    '3. Final ratios counted at the end.',
+                    '4. Only the majority side enters the lucky draw.',
+                    '5. If 50/50, iPhone 17 Pro for all (original prizes void).'
                 ],
                 grandTitle: '50% vs 50% Unlocks iPhone 17 Pro',
                 grandDesc: 'If final ratios are balanced, iPhone 17 Pro will be drawn from all users.'
@@ -214,11 +256,12 @@
         };
 
         let currentLang = 'zh-TW';
+        const API_BASE = ''; 
 
         function changeLang(lang) {
             currentLang = lang;
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`btn-${lang}`).classList.add('active');
+            document.getElementById('langDropdown').value = lang;
+            
             const d = i18n[lang];
             document.getElementById('i18n-main-title').innerText = d.mainTitle;
             document.getElementById('i18n-btn-a').innerText = '選擇 ' + d.btnA;
@@ -233,7 +276,7 @@
 
         async function updateUI() {
             try {
-                const res = await fetch('/api/votes');
+                const res = await fetch(`${API_BASE}/api/votes`);
                 const data = await res.json();
                 document.getElementById('bar-a').style.width = data.A.percent + '%';
                 document.getElementById('bar-b').style.width = data.B.percent + '%';
@@ -252,27 +295,34 @@
                     const targetId = data.A.count > data.B.count ? 'container-a' : 'container-b';
                     document.getElementById(targetId).appendChild(crown);
                 }
-            } catch (e) {}
+            } catch (e) { console.error("Sync error:", e); }
         }
 
         async function castVote(choice) {
-            if (localStorage.getItem('voted_vip_v5')) {
-                alert(currentLang === 'en' ? 'Voted!' : '已投票！');
+            if (localStorage.getItem('voted_vip_vFINAL_2025')) {
+                alert(currentLang === 'en' ? 'Already Voted!' : '您已經選擇過囉！');
                 return;
             }
             const name = (choice === 'A') ? i18n[currentLang].btnA : i18n[currentLang].btnB;
             if (window.confirm(`${i18n[currentLang].confirmMsg} 【${name}】 嗎？`)) {
-                await fetch('/api/vote', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({choice})
-                });
-                localStorage.setItem('voted_vip_v5', 'true');
-                updateUI();
+                try {
+                    const res = await fetch(`${API_BASE}/api/vote`, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({choice})
+                    });
+                    if (res.ok) {
+                        localStorage.setItem('voted_vip_vFINAL_2025', 'true');
+                        updateUI();
+                    }
+                } catch (e) { alert("Error connecting to server."); }
             }
         }
 
-        const navLang = navigator.language.includes('ja') ? 'ja' : navigator.language.includes('zh-CN') ? 'zh-CN' : navigator.language.includes('zh') ? 'zh-TW' : 'en';
+        // 自動檢測瀏覽器語系並初始化
+        const navLang = navigator.language.includes('ja') ? 'ja' : 
+                        navigator.language.includes('zh-CN') ? 'zh-CN' : 
+                        navigator.language.includes('zh') ? 'zh-TW' : 'en';
         changeLang(navLang);
         setInterval(updateUI, 5000);
     </script>
