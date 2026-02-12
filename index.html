@@ -3,170 +3,283 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>選擇大對決 - 抽獎活動</title>
+    <title>VIP 專屬抽獎池</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background: #f4f4f4; /* 淺灰色背景，模擬圖片質感 */
+        :root {
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-a: #ff3b30;
+            --accent-b: #007aff;
+            --gold: #ffb100;
         }
-        /* 標題漸層 */
-        .title-gradient {
-            background: linear-gradient(to bottom, #d4a373, #a67c00);
+
+        body {
+            background: radial-gradient(circle at 50% 0%, #1a1a2e 0%, #050505 100%);
+            color: #fff;
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* 主卡片 */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(40px);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            width: 100%;
+            max-width: 650px;
+            padding: 40px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            position: relative;
+        }
+
+        /* 進度條內部 % 數 */
+        .progress-container { height: 60px; background: #000; border-radius: 20px; position: relative; overflow: hidden; border: 1px solid var(--glass-border); display: flex; }
+        .bar-a { background: linear-gradient(90deg, #80001a, var(--accent-a)); transition: width 1.2s cubic-bezier(0.23, 1, 0.32, 1); display: flex; align-items: center; justify-content: center; }
+        .bar-b { background: linear-gradient(90deg, var(--accent-b), #003366); transition: width 1.2s cubic-bezier(0.23, 1, 0.32, 1); display: flex; align-items: center; justify-content: center; }
+        .percent-text { font-weight: 900; font-size: 1.4rem; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .vs-label { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: #fff; color: #000; font-weight: 900; font-style: italic; padding: 2px 10px; border-radius: 4px; font-size: 12px; z-index: 10; }
+
+        /* --- 終極大獎：吸睛樣式升級 --- */
+        .ultimate-reward-card {
+            position: relative;
+            background: rgba(255, 177, 0, 0.03);
+            border-radius: 30px;
+            padding: 30px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 177, 0, 0.1);
+            margin-top: 40px;
+            transition: 0.3s;
+        }
+
+        /* 旋轉流光邊框效果 */
+        .ultimate-reward-card::before {
+            content: "";
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(transparent, transparent, transparent, var(--gold));
+            animation: rotate 4s linear infinite;
+            z-index: 0;
+            opacity: 0.4;
+        }
+        
+        /* 內部遮罩確保內容在旋轉邊框上方 */
+        .ultimate-inner {
+            position: relative;
+            z-index: 1;
+            background: #0a0a0a;
+            border-radius: 26px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* iPhone 聖光與呼吸動畫 */
+        .iphone-halo {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .iphone-halo::after {
+            content: "";
+            position: absolute;
+            width: 120px; height: 120px;
+            background: radial-gradient(circle, rgba(255, 177, 0, 0.4) 0%, transparent 70%);
+            animation: pulse 2s infinite alternate;
+        }
+
+        .iphone-img {
+            width: 100px;
+            z-index: 2;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(255, 177, 0, 0.3));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse {
+            from { transform: scale(0.8); opacity: 0.3; }
+            to { transform: scale(1.2); opacity: 0.6; }
+        }
+
+        /* 金屬標題字 */
+        .gold-text-metallic {
+            background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fcf6ba 55%, #aa771c 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            letter-spacing: 2px;
         }
-        /* A組金屬紅 */
-        .btn-a {
-            background: linear-gradient(180deg, #e63946 0%, #7b0d1e 100%);
-            box-shadow: 0 4px 0 #560000, inset 0 2px 5px rgba(255,255,255,0.4);
-        }
-        /* B組金屬藍 */
-        .btn-b {
-            background: linear-gradient(180deg, #0056b3 0%, #002d5f 100%);
-            box-shadow: 0 4px 0 #001a35, inset 0 2px 5px rgba(255,255,255,0.4);
-        }
-        /* 進度條容器 */
-        .progress-track {
-            background: #1a1a1a;
-            border: 3px solid #333;
-            height: 34px;
-            position: relative;
-            overflow: hidden;
-            border-radius: 50px;
-        }
-        /* A組進度 */
-        .bar-a {
-            background: linear-gradient(90deg, #7b0000 0%, #ff1a1a 100%);
-            height: 100%;
-            transition: width 0.8s ease-out;
-            border-right: 2px solid #fff;
-        }
-        /* B組進度 */
-        .bar-b {
-            background: linear-gradient(90deg, #003d80 0%, #0066ff 100%);
-            height: 100%;
-            transition: width 0.8s ease-out;
-        }
-        /* VS 發光效果 */
-        .vs-glow {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 10;
-            text-shadow: 0 0 10px #fff;
-        }
-        .rule-dot { color: #d4a373; margin-right: 8px; }
+
+        /* 語系切換 */
+        .lang-control { position: fixed; top: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; gap: 0.5rem; }
+        .lang-btn { background: var(--glass); border: 1px solid var(--glass-border); padding: 6px 12px; font-size: 11px; color: rgba(255,255,255,0.4); border-radius: 6px; cursor: pointer; }
+        .lang-btn.active { color: #fff; border-color: #fff; background: rgba(255,255,255,0.1); }
     </style>
 </head>
-<body class="p-4 md:p-8 flex justify-center">
+<body>
 
-    <div class="max-w-2xl w-full bg-white shadow-2xl rounded-3xl overflow-hidden border border-gray-200">
-        <!-- 頂部標題區 -->
-        <div class="text-center py-8 px-4">
-            <h1 class="text-5xl font-black text-gray-800 tracking-tighter mb-2">抽獎規則</h1>
-            <h2 class="text-3xl font-bold title-gradient mb-4">【選擇大對決】</h2>
-            <p class="text-xl font-bold text-gray-700">選擇比例一致，全體固定抽 <span class="text-orange-600">iPhone!</span></p>
-        </div>
+    <div class="lang-control">
+        <button class="lang-btn" onclick="changeLang('zh-TW')" id="btn-zh-TW">繁</button>
+        <button class="lang-btn" onclick="changeLang('zh-CN')" id="btn-zh-CN">简</button>
+        <button class="lang-btn" onclick="changeLang('en')" id="btn-en">EN</button>
+        <button class="lang-btn" onclick="changeLang('ja')" id="btn-ja">JP</button>
+    </div>
 
-        <!-- 獎項對決區 -->
-        <div class="px-6 py-4 bg-gray-50">
-            <div class="grid grid-cols-2 gap-4 mb-6">
-                <!-- A 組 -->
-                <div class="text-center">
-                    <img src="https://img.icons8.com/color/144/nintendo-switch-console.png" class="mx-auto mb-2 w-32 h-32 object-contain" alt="Switch">
-                    <div class="bg-red-800 text-white py-1 px-3 rounded-md text-sm font-bold inline-block">A組 Nintendo Switch</div>
-                </div>
-                <!-- B 組 -->
-                <div class="text-center">
-                    <img src="https://img.icons8.com/color/144/diamond--v1.png" class="mx-auto mb-2 w-32 h-32 object-contain" alt="Diamond">
-                    <div class="bg-blue-900 text-white py-1 px-3 rounded-md text-sm font-bold inline-block">B組 鑽石 500,000</div>
-                </div>
+    <div class="glass-card">
+        <header class="text-center mb-10">
+            <h1 id="i18n-main-title" class="text-4xl md:text-5xl font-black bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-500 mb-6 uppercase">VIP 專屬抽獎池</h1>
+            <div class="rule-box text-left border border-white/10 p-4 rounded-2xl bg-white/5">
+                <h3 id="i18n-rule-header" class="text-[10px] font-bold text-orange-400 tracking-[0.3em] uppercase mb-3">Event Rules / 活動規則</h3>
+                <ul id="i18n-rules-list" class="text-xs text-gray-400 space-y-1 font-light"></ul>
             </div>
+        </header>
 
-            <!-- 長條圖百分比 -->
-            <div class="flex justify-between font-black text-3xl px-2 mb-1">
-                <span id="percent-A" class="text-red-600">--%</span>
-                <span id="percent-B" class="text-blue-700">--%</span>
+        <div class="grid grid-cols-2 gap-6 mb-10">
+            <div class="text-center">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Nintendo_Switch_Console.png/640px-Nintendo_Switch_Console.png" class="h-32 mx-auto mb-4 object-contain" alt="Switch">
+                <button id="i18n-btn-a" onclick="castVote('A')" class="w-full py-4 bg-[#ff3b30] hover:scale-105 rounded-2xl font-black text-xs transition-all">選擇 Switch</button>
             </div>
-
-            <!-- 進度條主體 -->
-            <div class="progress-track flex mb-2">
-                <div id="bar-A" class="bar-a" style="width: 50%"></div>
-                <div id="bar-B" class="bar-b" style="width: 50%"></div>
-                <div class="vs-glow text-white italic font-black text-xl">VS</div>
-            </div>
-
-            <!-- 人數顯示 -->
-            <div class="flex justify-between text-gray-500 font-bold mb-8 px-2">
-                <span id="count-A">0 人</span>
-                <span id="count-B">0 人</span>
-            </div>
-
-            <!-- 投票按鈕 -->
-            <div class="grid grid-cols-2 gap-4 mb-8">
-                <button onclick="castVote('A')" class="btn-a text-white py-4 rounded-full font-bold text-lg active:translate-y-1 transition-all">
-                    選擇 A: Nintendo Switch
-                </button>
-                <button onclick="castVote('B')" class="btn-b text-white py-4 rounded-full font-bold text-lg active:translate-y-1 transition-all">
-                    選擇 B: 鑽石 500,000
-                </button>
+            <div class="text-center">
+                <img src="https://www.freeiconspng.com/uploads/diamond-png-21.png" class="h-32 mx-auto mb-4 object-contain" alt="Diamond">
+                <button id="i18n-btn-b" onclick="castVote('B')" class="w-full py-4 bg-[#007aff] hover:scale-105 rounded-2xl font-black text-xs transition-all">選擇 鑽石</button>
             </div>
         </div>
 
-        <!-- 規則與 iPhone 區 -->
-        <div class="p-8 border-t border-gray-100">
-            <ul class="text-lg font-bold text-gray-700 space-y-3 mb-10">
-                <li><span class="rule-dot">●</span>若逾達 <span class="text-red-600">50% / 50%</span> ➜ 全體統一抽 <span class="text-orange-600">iPhone!</span></li>
-                <li><span class="rule-dot">●</span>若比例不達 <span class="text-red-600">50% / 50%</span> ➜ 僅抽選擇比例較高的獎項</li>
-            </ul>
+        <!-- 互動 Bar -->
+        <div class="progress-container mb-2">
+            <div id="bar-a" class="bar-a" style="width: 50%"><span id="percent-a" class="percent-text">50%</span></div>
+            <div id="bar-b" class="bar-b" style="width: 50%"><span id="percent-b" class="percent-text">50%</span></div>
+            <div class="vs-label">VS</div>
+        </div>
 
-            <div class="flex flex-col md:flex-row items-center justify-center gap-6">
-                <img src="https://img.icons8.com/fluency/240/iphone-14-pro.png" class="w-40" alt="iPhone 17">
-                <div class="text-center md:text-left">
-                    <h3 class="text-3xl font-black text-gray-800 leading-tight">
-                        成功達 <span class="text-orange-600">50%/50%</span><br>
-                        全體固定抽<br>
-                        <span class="text-4xl title-gradient">iPhone 17!</span>
-                    </h3>
+        <!-- 吸睛的終極獎勵區 -->
+        <div class="ultimate-reward-card">
+            <div class="ultimate-inner">
+                <div class="iphone-halo">
+                    <img src="https://img.icons8.com/fluency/240/iphone-14-pro.png" class="iphone-img" alt="iPhone 17 Pro">
+                </div>
+                <div>
+                    <div class="inline-block px-2 py-1 bg-orange-500/20 rounded border border-orange-500/30 mb-2">
+                        <span class="text-[10px] text-orange-400 font-black tracking-widest uppercase">Secret Grand Prize</span>
+                    </div>
+                    <h4 id="i18n-grand-title" class="gold-text-metallic text-2xl mb-2">50% vs 50% 則抽出 iPhone 17 Pro</h4>
+                    <p id="i18n-grand-desc" class="text-xs text-gray-400 leading-relaxed">
+                        若最終獎池比例達成 <span class="text-white font-bold italic">完美平衡</span>，我們將加碼抽出 Apple iPhone 17 Pro 給所有參與者！
+                    </p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        const API_URL = ''; // 如果是部署到 Render，這裡保持空字串即可
+        const i18n = {
+            'zh-TW': {
+                mainTitle: 'VIP 專屬抽獎池',
+                btnA: 'Switch',
+                btnB: '鑽石',
+                confirmMsg: '一經選擇則無法更改！你確定要投給',
+                rules: ['1. 選擇參與獎池', '2. 活動期間不可更改', '3. 結束後統計最終比例', '4. 僅抽比例最高之獎池', '5. 若 50/50 則加碼抽 iPhone 17 Pro'],
+                grandTitle: '50% : 50% 達成限定大獎',
+                grandDesc: '若最終比例為完美平衡，將從全體玩家中加碼抽出 iPhone 17 Pro 大獎！'
+            },
+            'zh-CN': {
+                mainTitle: 'VIP 专属抽奖池',
+                btnA: 'Switch',
+                btnB: '钻石',
+                confirmMsg: '一经选择则无法更改！你确定要投给',
+                rules: ['1. 选择参与奖池', '2. 活动期间不可更改', '3. 结束后统计最终比例', '4. 仅抽比例最高之奖池', '5. 若 50/50 则加码抽 iPhone 17 Pro'],
+                grandTitle: '50% : 50% 达成限定大奖',
+                grandDesc: '若最终比例为完美平衡，将從全体玩家中加码抽出 iPhone 17 Pro 大奖！'
+            },
+            'en': {
+                mainTitle: 'VIP EXCLUSIVE POOL',
+                btnA: 'Switch',
+                btnB: 'Diamond',
+                confirmMsg: 'Cannot be changed! Vote for',
+                rules: ['1. Select your pool', '2. Cannot change after vote', '3. Stats counted at end', '4. Majority pool wins', '5. 50/50 unlocks iPhone 17 Pro'],
+                grandTitle: '50% : 50% UNLOCKS GRAND PRIZE',
+                grandDesc: 'If final stats reach a perfect balance, an iPhone 17 Pro will be awarded to all!'
+            },
+            'ja': {
+                mainTitle: 'VIP 専用抽選プール',
+                btnA: 'Switch',
+                btnB: 'ダイヤモンド',
+                confirmMsg: '変更できません！本当に',
+                rules: ['1. プールを選択', '2. 選択後の変更不可', '3. 終了後に集計', '4. 比率が高い方を抽選', '5. 50/50 の場合 iPhone 17 Pro 抽選'],
+                grandTitle: '50% : 50% 達成限定大賞',
+                grandDesc: '最終比率が完全に一致した場合、全員の中から iPhone 17 Pro を抽選！'
+            }
+        };
+
+        let currentLang = 'zh-TW';
+
+        function changeLang(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn-${lang}`).classList.add('active');
+            
+            const d = i18n[lang];
+            document.getElementById('i18n-main-title').innerText = d.mainTitle;
+            document.getElementById('i18n-btn-a').innerText = '選擇 ' + d.btnA;
+            document.getElementById('i18n-btn-b').innerText = '選擇 ' + d.btnB;
+            document.getElementById('i18n-grand-title').innerText = d.grandTitle;
+            document.getElementById('i18n-grand-desc').innerText = d.grandDesc;
+            
+            const list = document.getElementById('i18n-rules-list');
+            list.innerHTML = d.rules.map(r => `<li>${r}</li>`).join('');
+        }
 
         async function updateUI() {
             try {
-                const res = await fetch(`${API_URL}/api/votes`);
+                const res = await fetch('/api/votes');
                 const data = await res.json();
-                
-                // 更新百分比與寬度
-                document.getElementById('bar-A').style.width = data.A.percent + '%';
-                document.getElementById('bar-B').style.width = data.B.percent + '%';
-                
-                document.getElementById('percent-A').innerText = data.A.percent + '%';
-                document.getElementById('percent-B').innerText = data.B.percent + '%';
-                
-                // 更新人數
-                document.getElementById('count-A').innerText = data.A.count.toLocaleString() + ' 人';
-                document.getElementById('count-B').innerText = data.B.count.toLocaleString() + ' 人';
-            } catch (e) { console.error("Update failed", e); }
+                document.getElementById('bar-a').style.width = data.A.percent + '%';
+                document.getElementById('bar-b').style.width = data.B.percent + '%';
+                document.getElementById('percent-a').innerText = data.A.percent + '%';
+                document.getElementById('percent-b').innerText = data.B.percent + '%';
+            } catch (e) {}
         }
 
         async function castVote(choice) {
-            await fetch(`${API_URL}/api/vote`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({choice})
-            });
-            updateUI();
+            if (localStorage.getItem('voted_vip_2025')) {
+                alert('您已投票！');
+                return;
+            }
+            const name = (choice === 'A') ? i18n[currentLang].btnA : i18n[currentLang].btnB;
+            if (window.confirm(`${i18n[currentLang].confirmMsg} 【${name}】 嗎？`)) {
+                await fetch('/api/vote', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({choice})
+                });
+                localStorage.setItem('voted_vip_2025', 'true');
+                updateUI();
+                alert('投票成功！');
+            }
         }
 
-        // 初始化與定時刷新
+        const navLang = navigator.language.includes('ja') ? 'ja' : navigator.language.includes('zh-CN') ? 'zh-CN' : navigator.language.includes('zh') ? 'zh-TW' : 'en';
+        changeLang(navLang);
         updateUI();
         setInterval(updateUI, 5000);
     </script>
