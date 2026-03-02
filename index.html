@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VIP 專屬抽獎池 - ULTIMATE PRESTIGE</title>
+    <title>VIP 專屬抽獎池 - LEVEL RESTRICTED</title>
     <!-- PWA Support -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#050505">
@@ -36,17 +36,32 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             text-align: center; font-size: clamp(2.2rem, 8vw, 3.5rem);
             filter: drop-shadow(0 4px 10px rgba(0,0,0,0.8));
+            margin-bottom: 20px;
+        }
+
+        /* --- 用戶資訊卡 --- */
+        .user-profile-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--gold-dark);
+            border-radius: 20px;
+            padding: 12px 25px;
+            display: flex; align-items: center; gap: 15px;
             margin-bottom: 25px;
+            box-shadow: inset 0 0 10px rgba(191, 149, 63, 0.2);
+        }
+        .level-badge {
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+            color: #000; font-weight: 900; padding: 2px 8px; border-radius: 6px; font-size: 14px;
         }
 
         .main-card {
-            background: rgba(10, 10, 10, 0.98); border: 1px solid rgba(191, 149, 63, 0.2);
+            background: rgba(10, 10, 10, 0.98); border: 1px solid rgba(191, 149, 63, 0.25);
             border-radius: 56px; width: 100%; max-width: 620px; 
             padding: clamp(25px, 6vw, 50px);
             box-shadow: 0 40px 100px rgba(0,0,0,1); position: relative;
         }
 
-        /* --- 智慧皇冠 (靜態斜角 - 避讓優化) --- */
+        /* --- 智慧皇冠 (避讓優化) --- */
         #crown {
             position: absolute; width: 52px; height: 52px;
             z-index: 500; filter: drop-shadow(0 0 15px var(--gold-primary));
@@ -54,11 +69,10 @@
             display: none; pointer-events: none;
         }
 
-        /* --- 限定成就加碼 (置頂吸睛) --- */
+        /* --- 限定成就加碼 --- */
         .legendary-card {
             position: relative; background: #050505; border-radius: 44px;
-            padding: 2px; overflow: hidden; margin-bottom: 35px;
-            box-shadow: 0 0 50px rgba(191, 149, 63, 0.3);
+            padding: 3px; overflow: hidden; margin-bottom: 35px;
         }
         .legendary-card::before {
             content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
@@ -71,10 +85,9 @@
             border-radius: 41px; padding: 35px 20px; text-align: center;
         }
         @keyframes laserRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .iphone-img { width: 110px; margin: 0 auto 15px auto; filter: drop-shadow(0 0 30px rgba(191,149,63,0.7)); }
 
-        .iphone-img { width: 120px; margin: 0 auto 15px auto; filter: drop-shadow(0 0 30px rgba(191,149,63,0.7)); }
-
-        /* 進度條與 Bar */
+        /* 進度條 */
         .progress-wrapper { position: relative; margin: 60px 0 25px 0; }
         .progress-container { height: 72px; background: #000; border-radius: 22px; border: 1px solid rgba(255, 255, 255, 0.15); display: flex; }
         .bar-a { background: linear-gradient(90deg, #800, var(--accent-red)); transition: width 1.2s ease; display: flex; align-items: center; justify-content: center; overflow: visible; }
@@ -82,24 +95,29 @@
         .percent-text { font-weight: 900; font-size: 2rem; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.8); position: relative; }
         .vs-label { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: #fff; font-weight: 900; font-size: 15px; z-index: 10; text-shadow: 0 0 10px #000; }
 
-        /* 獎項展示 (恢復原本距離) */
-        .prize-img { width: 100px; height: 100px; object-fit: contain; filter: drop-shadow(0 0 20px rgba(255,255,255,0.1)); }
+        /* 按鈕視覺 */
+        .btn-premium { border-radius: 20px; font-weight: 900; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; cursor: pointer; border: 1px solid rgba(255,255,255,0.15); }
+        .btn-a-red { background: linear-gradient(145deg, #400, #100); color: #ff9999; }
+        .btn-a-red:hover:not(:disabled) { background: var(--accent-red); color: #fff; box-shadow: 0 0 30px rgba(255, 45, 85, 0.6); transform: translateY(-3px); }
+        .btn-b-blue { background: linear-gradient(145deg, #001d4d, #000a1a); color: #99c2ff; }
+        .btn-b-blue:hover:not(:disabled) { background: var(--accent-blue); color: #fff; box-shadow: 0 0 30px rgba(0, 122, 255, 0.6); transform: translateY(-3px); }
+        
+        /* 鎖定狀態 */
+        .btn-locked { opacity: 0.4; cursor: not-allowed; filter: grayscale(1); border: 1px solid #444; }
 
-        /* 活動規則框 (置底加亮) */
+        /* 規則框 */
         .rule-box {
             background: rgba(255, 255, 255, 0.08); border: 1px dashed rgba(191, 149, 63, 0.3);
             padding: 24px; border-radius: 24px; margin-top: 35px;
         }
-        .rule-item { color: #ffffff; font-weight: 500; line-height: 1.8; font-size: 13px; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+        .rule-item { color: #ffffff; font-weight: 500; line-height: 1.8; font-size: 13px; }
 
-        /* 按鈕視覺 */
-        .btn-premium { border-radius: 20px; font-weight: 900; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; cursor: pointer; border: 1px solid rgba(255,255,255,0.15); }
-        .btn-a-red { background: linear-gradient(145deg, #400, #100); color: #ff9999; }
-        .btn-a-red:hover { background: var(--accent-red); color: #fff; box-shadow: 0 0 30px rgba(255, 45, 85, 0.6); transform: translateY(-3px); }
-        .btn-b-blue { background: linear-gradient(145deg, #001d4d, #000a1a); color: #99c2ff; }
-        .btn-b-blue:hover { background: var(--accent-blue); color: #fff; box-shadow: 0 0 30px rgba(0, 122, 255, 0.6); transform: translateY(-3px); }
+        /* 錨點 */
+        #anchor-a { position: absolute; top: -45px; left: -35px; } 
+        #anchor-b { position: absolute; top: -45px; right: -35px; } 
+        #anchor-iphone { position: absolute; top: -35px; right: -25px; }
 
-        /* 右上角語系 */
+        /* 下拉選單 */
         .lang-control { position: fixed; top: 1rem; right: 1rem; z-index: 9999; }
         .lang-select {
             background: rgba(0, 0, 0, 0.85); border: 1px solid var(--gold-dark); color: var(--gold-primary);
@@ -107,11 +125,6 @@
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23bf953f' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
             background-repeat: no-repeat; background-position: right 8px center;
         }
-
-        /* 皇冠錨點 (加大偏移量以避開數字) */
-        #anchor-a { position: absolute; top: -45px; left: -35px; } 
-        #anchor-b { position: absolute; top: -45px; right: -35px; } 
-        #anchor-iphone { position: absolute; top: -35px; right: -25px; }
 
         /* 確認彈窗 */
         #voteModal {
@@ -124,7 +137,6 @@
             padding: 40px; max-width: 380px; width: 100%; text-align: center;
         }
 
-        /* 網頁最下方免責聲明 */
         .web-footer {
             max-width: 600px; width: 100%; margin-top: 40px; padding-bottom: 40px;
             text-align: center; font-size: 11px; color: rgba(255,255,255,0.4);
@@ -134,7 +146,6 @@
 </head>
 <body>
 
-    <!-- 智慧皇冠 -->
     <svg id="crown" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M5 21H19V19H5V21ZM5 17H19V11L15 13L12 7L9 13L5 11V17ZM12 5C13.1046 5 14 4.10457 14 3C14 1.89543 13.1046 1 12 1C10.8954 1 10 1.89543 10 3C10 4.10457 10.8954 5 12 5Z" fill="#ffb100"/>
     </svg>
@@ -155,17 +166,30 @@
             <p id="i18n-modal-msg" class="text-sm text-white mb-8 leading-relaxed">投票後不得更改選項，確認投票嗎？</p>
             <div class="flex justify-center gap-4">
                 <button onclick="closeModal()" class="px-8 py-3 text-gray-500 font-bold hover:text-white">否</button>
-                <button onclick="confirmVote()" class="px-10 py-3 bg-[#bf953f] text-black font-black rounded-xl hover:shadow-[0_0_15px_rgba(191,149,63,0.5)] transition-all">是</button>
+                <button onclick="confirmVote()" class="px-10 py-3 bg-[#bf953f] text-black font-black rounded-xl">是</button>
             </div>
         </div>
     </div>
 
     <div class="main-card">
-        <header>
+        <header class="text-center">
             <h1 id="i18n-main-title" class="title-prestige">VIP 專屬抽獎池</h1>
+            
+            <!-- 【用戶資訊卡】 -->
+            <div class="user-profile-card inline-flex mx-auto">
+                <div class="text-left">
+                    <p class="text-[10px] text-gray-400 uppercase tracking-widest mb-1">Account Info</p>
+                    <div class="flex items-center gap-3">
+                        <span id="user-id" class="font-bold text-sm">Guest_VIP888</span>
+                        <span class="text-gray-600">|</span>
+                        <span class="text-xs">Level</span>
+                        <span id="user-level" class="level-badge">25</span>
+                    </div>
+                </div>
+            </div>
         </header>
 
-        <!-- 【1. 限定成就加碼】置頂 -->
+        <!-- 【1. 限定成就加碼】 -->
         <div class="legendary-card">
             <div class="legendary-inner">
                 <div id="i18n-tag" class="inline-block bg-[#bf953f] text-black text-[10px] font-black px-4 py-1 rounded-full mb-4 uppercase tracking-widest shadow-xl">限定成就加碼</div>
@@ -177,14 +201,14 @@
             </div>
         </div>
 
-        <!-- 【2. 獎項展示】 恢復寬闊距離 -->
+        <!-- 【2. 獎項展示】 -->
         <div class="grid grid-cols-2 gap-8 mb-6">
             <div class="text-center">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Nintendo_Switch_Console.png/640px-Nintendo_Switch_Console.png" class="prize-img mx-auto mb-2" alt="Switch">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Nintendo_Switch_Console.png/640px-Nintendo_Switch_Console.png" class="h-24 mx-auto mb-2 object-contain" alt="Switch">
                 <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Team Switch</p>
             </div>
             <div class="text-center">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/PlayStation_5_and_DualSense_with_transparent_background.png/640px-PlayStation_5_and_DualSense_with_transparent_background.png" class="prize-img mx-auto mb-2" alt="PS5">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/PlayStation_5_and_DualSense_with_transparent_background.png/640px-PlayStation_5_and_DualSense_with_transparent_background.png" class="h-24 mx-auto mb-2 object-contain" alt="PS5">
                 <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Team PS5</p>
             </div>
         </div>
@@ -206,49 +230,83 @@
             </div>
         </div>
 
-        <!-- 【4. 選擇按鈕】 放在 Bar 下方 -->
+        <!-- 【4. 選擇按鈕】 -->
         <div class="grid grid-cols-2 gap-4">
-            <button onclick="openVoteModal('A')" class="btn-premium btn-a-red py-5">選擇 Switch</button>
-            <button onclick="openVoteModal('B')" class="btn-premium btn-b-blue py-5">選擇 PS5</button>
+            <button id="btn-vote-a" onclick="openVoteModal('A')" class="btn-premium btn-a-red py-5">選擇 Switch</button>
+            <button id="btn-vote-b" onclick="openVoteModal('B')" class="btn-premium btn-b-blue py-5">選擇 PS5</button>
         </div>
 
-        <!-- 【5. 活動規則區】 放在最下方 -->
+        <!-- 【5. 活動規則】 -->
         <div class="rule-box">
             <h3 class="text-[10px] font-bold text-[#fcf6ba] tracking-[0.3em] uppercase mb-4">Activity Rules / 活動規則</h3>
             <ul id="i18n-rules-list" class="space-y-3 rule-item"></ul>
         </div>
     </div>
 
-    <!-- 【免責聲明】 網頁最下方 -->
     <footer class="web-footer">
         <p id="i18n-disclaimer">主辦單位保留隨時變更活動辦法、獎項內容，以及暫停、延長、提前終止本活動之權利，本活動辦法若未盡詳細事宜，主辦單位得隨時修訂公佈，修改訊息將於本網站上公佈，不另行通知</p>
     </footer>
 
     <script>
+        // 模擬用戶數據（在此修改等級進行測試）
+        const USER_DATA = {
+            id: "VIP_PLAYER_777",
+            level: 25  // 如果改為 15，按鈕會被鎖定
+        };
+
         const MOCK_BASE = { A: 3420, B: 1580 }; 
         let selectedChoice = null;
 
         const i18n = {
             'zh-TW': {
+                mainTitle: 'VIP 專屬抽獎池', btnA: 'Switch', btnB: 'PS5',
+                lowLevelMsg: '參與等級不足！需達到等級 20 才可投票。',
                 rules: [
                     '1.參與活動時，請先選擇欲參加之獎池，並完成投票。',
                     '2.活動期間內不得更改已選擇之獎池。',
                     '3.活動結束後將統計各獎池最終投票比例，比例計算至小數點後一位並採四捨五入。',
                     '4.若各獎池投票比例不相同，則僅從「投票比例最高之獎池」參與用戶中抽出得主。',
-                    '5.若最終比例為 50% vs 50%，則改由全體參與用戶中抽出 iPhone 17 Pro 乙名，原設定獎項將不另行抽出。',
+                    '5.若最終比例為 50% vs 50%，則改理由全體參與用戶中抽出 iPhone 17 Pro 乙名，原設定獎項將不另行抽出。',
                     '6.中獎用戶須於指定時間內親自至本公司完成領獎手續。'
+                ]
+            },
+            'en': {
+                mainTitle: 'VIP PRESTIGE POOL', btnA: 'Switch', btnB: 'PS5',
+                lowLevelMsg: 'Insufficient Level! LV.20 required to vote.',
+                rules: [
+                    '1. Choose a pool and complete your vote to participate.',
+                    '2. Selection cannot be changed during the event.',
+                    '3. Final stats are rounded to the nearest whole number.',
+                    '4. Only the majority pool side enters the draw.',
+                    '5. If 50/50, iPhone 17 Pro is drawn from ALL users.',
+                    '6. Winners must collect prizes in person at our office.'
                 ]
             }
         };
 
         function changeLang(lang) {
             const list = document.getElementById('i18n-rules-list');
-            list.innerHTML = i18n['zh-TW'].rules.map(r => `<li>${r}</li>`).join('');
+            list.innerHTML = (i18n[lang] || i18n['zh-TW']).rules.map(r => `<li>${r}</li>`).join('');
             updateUI();
         }
 
         function updateUI() {
-            const userVote = localStorage.getItem('voted_vip_FINAL_V15');
+            // 顯示用戶資料
+            document.getElementById('user-id').innerText = USER_DATA.id;
+            document.getElementById('user-level').innerText = USER_DATA.level;
+
+            // 等級判斷
+            const btnA = document.getElementById('btn-vote-a');
+            const btnB = document.getElementById('btn-vote-b');
+            if(USER_DATA.level < 20) {
+                btnA.classList.add('btn-locked');
+                btnB.classList.add('btn-locked');
+            } else {
+                btnA.classList.remove('btn-locked');
+                btnB.classList.remove('btn-locked');
+            }
+
+            const userVote = localStorage.getItem('voted_vip_vLEVEL_AUTH');
             let countA = MOCK_BASE.A + (userVote === 'A' ? 1 : 0);
             let countB = MOCK_BASE.B + (userVote === 'B' ? 1 : 0);
             let total = countA + countB;
@@ -266,17 +324,9 @@
 
             const crown = document.getElementById('crown');
             let targetAnchor, rotation;
-
-            if (pA === 50 && pB === 50) {
-                targetAnchor = document.getElementById('anchor-iphone');
-                rotation = 'rotate(45deg)';
-            } else if (countA > countB) {
-                targetAnchor = document.getElementById('anchor-a');
-                rotation = 'rotate(-45deg)';
-            } else {
-                targetAnchor = document.getElementById('anchor-b');
-                rotation = 'rotate(45deg)';
-            }
+            if (pA === 50 && pB === 50) { targetAnchor = document.getElementById('anchor-iphone'); rotation = 'rotate(45deg)'; }
+            else if (countA > countB) { targetAnchor = document.getElementById('anchor-a'); rotation = 'rotate(-45deg)'; }
+            else { targetAnchor = document.getElementById('anchor-b'); rotation = 'rotate(45deg)'; }
 
             if (targetAnchor) {
                 const rect = targetAnchor.getBoundingClientRect();
@@ -288,13 +338,22 @@
         }
 
         function openVoteModal(choice) {
-            if (localStorage.getItem('voted_vip_FINAL_V15')) { alert('您已投票過囉！'); return; }
+            const lang = document.getElementById('langDropdown').value;
+            // 檢查等級限制
+            if (USER_DATA.level < 20) {
+                alert((i18n[lang] || i18n['zh-TW']).lowLevelMsg);
+                return;
+            }
+            if (localStorage.getItem('voted_vip_vLEVEL_AUTH')) {
+                alert('您已投票過囉！');
+                return;
+            }
             selectedChoice = choice;
             document.getElementById('voteModal').style.display = 'flex';
         }
         function closeModal() { document.getElementById('voteModal').style.display = 'none'; }
         function confirmVote() {
-            localStorage.setItem('voted_vip_FINAL_V15', selectedChoice);
+            localStorage.setItem('voted_vip_vLEVEL_AUTH', selectedChoice);
             closeModal();
             updateUI();
             alert('投票成功！');
