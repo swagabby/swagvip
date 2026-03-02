@@ -9,14 +9,16 @@
         :root {
             --bg: #000000;
             --card: #0a0a0a;
-            /* 高級白金金配色 */
+            /* 高級白金金 */
             --gold-light: #fff5c0;
             --gold-primary: #d4af37;
             --gold-dark: #8a6d1c;
             --platinum: #e5e5e5;
             /* 沉穩對立色 */
             --switch-blue: #3d5a80; 
+            --switch-hover: #5c7ba3;
             --ps5-red: #7b1e1e;    
+            --ps5-hover: #a33b3b;
             --success: #10b981;
             --error: #ef4444;
             --text: #ffffff;
@@ -29,32 +31,22 @@
 
         .container { width: 100%; max-width: 500px; padding-bottom: 80px; }
 
-        /* --- 頂級 3D 流光標題 (白金金質感) --- */
+        /* --- 頂級 3D 流光標題 --- */
         .title-prestige {
             font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em;
-            background: linear-gradient(to bottom, 
-                var(--platinum) 0%, 
-                var(--gold-light) 30%, 
-                var(--gold-primary) 60%, 
-                var(--gold-dark) 100%);
+            background: linear-gradient(to bottom, var(--platinum) 0%, var(--gold-light) 30%, var(--gold-primary) 60%, var(--gold-dark) 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-align: center; 
-            font-size: clamp(2rem, 8vw, 3.2rem); /* 調整字體大小以適配標題長度 */
+            text-align: center; font-size: clamp(2rem, 8vw, 3.2rem);
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.9));
-            margin: 40px 0 30px 0;
-            white-space: nowrap;
+            margin: 40px 0 30px 0; white-space: nowrap;
         }
 
         /* --- 個人狀態面板 --- */
         .user-panel {
             background: rgba(255,255,255,0.03);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 15px 20px;
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            border-radius: 20px; padding: 15px 20px; margin-bottom: 30px;
+            display: flex; justify-content: space-between; align-items: center;
         }
         .info-group { display: flex; flex-direction: column; }
         .info-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 2px; }
@@ -63,58 +55,132 @@
         .eligible { background: rgba(16, 185, 129, 0.15); color: var(--success); }
         .ineligible { background: rgba(239, 68, 68, 0.15); color: var(--error); }
 
-        /* --- 限定成就加碼 (雷射旋轉卡片) --- */
+        /* --- 【限定成就加碼】全域流金熔岩動畫 --- */
         .legendary-card {
-            position: relative; background: #050505; border-radius: 44px;
-            padding: 3px; overflow: hidden; margin-bottom: 35px;
+            position: relative;
+            border-radius: 28px;
+            padding: 4px;
+            overflow: hidden;
+            margin-bottom: 35px;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
         }
+
+        /* 持續流動的熔岩背景層 */
         .legendary-card::before {
-            content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: conic-gradient(transparent, var(--gold-primary) 25%, var(--gold-light) 26%, var(--gold-primary) 27%, transparent 35%);
-            animation: laserRotate 4s linear infinite;
+            content: "";
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(
+                45deg,
+                #8a6d1c, 
+                #d4af37, 
+                #fff5c0, 
+                #d4af37, 
+                #8a6d1c
+            );
+            background-size: 400% 400%;
+            animation: lavaFlow 10s ease infinite;
+            z-index: 1;
         }
+
+        @keyframes lavaFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 閃爍的星光粒子點綴 (Overlay) */
+        .legendary-card::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(circle, #fff 10%, transparent 10%);
+            background-size: 50px 50px;
+            opacity: 0.1;
+            z-index: 2;
+            animation: sparkle 3s linear infinite;
+        }
+
+        @keyframes sparkle {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50px); }
+        }
+
         .legendary-inner {
-            position: relative; z-index: 10; 
-            background: radial-gradient(circle at 50% 40%, rgba(191, 149, 63, 0.2) 0%, #0a0a0a 85%);
-            border-radius: 41px; padding: 35px 20px; text-align: center;
+            position: relative;
+            z-index: 10;
+            /* 讓背景稍微透出來，營造琉璃感 */
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 30px 20px;
+            text-align: center;
         }
-        @keyframes laserRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        
-        .iphone-img { width: 100px; margin: 0 auto 15px auto; filter: drop-shadow(0 0 25px rgba(191,149,63,0.5)); display: block; }
-        .crown-icon { font-size: 36px; color: var(--gold-light); filter: drop-shadow(0 0 10px gold); position: absolute; top: -15px; left: 50%; transform: translateX(-50%); z-index: 20; display: none; }
-        .legendary-title { color: var(--gold-light); font-weight: 900; font-size: 20px; letter-spacing: 2px; margin-bottom: 5px; }
+
+        .iphone-img { width: 100px; margin: 0 auto 15px auto; filter: drop-shadow(0 0 20px rgba(255,255,255,0.4)); display: block; }
+        .crown-icon { font-size: 40px; color: var(--gold-light); filter: drop-shadow(0 0 15px gold); position: absolute; top: -15px; left: 50%; transform: translateX(-50%); z-index: 20; display: none; }
+        .legendary-title { color: var(--gold-light); font-weight: 900; font-size: 22px; letter-spacing: 2px; margin-bottom: 5px; }
         .legendary-desc { color: var(--gold-primary); font-size: 13px; font-weight: bold; line-height: 1.6; }
 
-        /* --- 【獎項展示】 --- */
+        /* --- 【獎項展示區】 --- */
         .award-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 24px; }
         .award-item { position: relative; text-align: center; }
         .award-img { height: 96px; margin: 0 auto 8px auto; object-fit: contain; display: block; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)); }
         .award-label { font-size: 9px; color: var(--text-dim); font-weight: bold; text-transform: uppercase; letter-spacing: 0.12em; }
         .award-crown { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-size: 26px; color: var(--gold-light); filter: drop-shadow(0 0 8px gold); display: none; }
 
-        /* --- 進度 Bar --- */
-        .bar-container { height: 32px; background: #111; border-radius: 16px; display: flex; overflow: hidden; border: 1px solid #1a1a1a; margin: 15px 0; }
-        .bar-a { background: var(--switch-blue); transition: width 1s cubic-bezier(0.1, 0.7, 0.1, 1); opacity: 0.9; }
-        .bar-b { background: var(--ps5-red); transition: width 1s cubic-bezier(0.1, 0.7, 0.1, 1); opacity: 0.9; }
+        /* --- 進度 Bar (內嵌文字與 VS) --- */
+        .bar-container { 
+            height: 40px; background: #111; border-radius: 20px; 
+            display: flex; overflow: hidden; border: 1px solid #1a1a1a; 
+            margin: 20px 0; position: relative; 
+        }
+        .bar-a { 
+            background: var(--switch-blue); width: 50%; 
+            display: flex; align-items: center; justify-content: flex-start;
+            transition: width 1s cubic-bezier(0.1, 0.7, 0.1, 1);
+        }
+        .bar-b { 
+            background: var(--ps5-red); width: 50%; 
+            display: flex; align-items: center; justify-content: flex-end;
+            transition: width 1s cubic-bezier(0.1, 0.7, 0.1, 1);
+        }
+        .bar-text { color: #fff; font-weight: 900; font-size: 15px; padding: 0 15px; z-index: 5; }
+        .vs-overlay {
+            position: absolute; top: 50%; left: 50%; 
+            transform: translate(-50%, -50%);
+            color: #fff; font-weight: 900; font-size: 18px; font-style: italic;
+            text-shadow: 0 0 8px rgba(0,0,0,0.8); z-index: 10;
+            pointer-events: none;
+        }
 
-        .ratio-row { display: flex; justify-content: space-between; font-size: 22px; font-weight: 900; }
-        .ratio-a { color: #5c7ba3; } /* 稍微加亮以便閱讀 */
-        .ratio-b { color: #a33b3b; }
-        .total-info { text-align: center; color: var(--text-dim); font-size: 11px; margin-top: 10px; }
+        .total-info { text-align: center; color: var(--text-dim); font-size: 11px; margin-top: 5px; }
 
         /* --- 按鈕 --- */
         .btn-group { display: flex; gap: 12px; margin-top: 35px; }
-        .vote-btn { flex: 1; padding: 16px; border: none; border-radius: 12px; font-weight: 900; cursor: pointer; transition: 0.2s; font-size: 15px; text-transform: uppercase; }
+        .vote-btn { 
+            flex: 1; padding: 16px; border: none; border-radius: 12px; 
+            font-weight: 900; cursor: pointer; transition: all 0.3s ease; 
+            font-size: 15px; text-transform: uppercase;
+        }
         .btn-a { background: var(--switch-blue); color: #fff; }
+        .btn-a:hover { 
+            background: var(--switch-hover); 
+            box-shadow: 0 0 20px rgba(92, 123, 163, 0.4);
+            transform: translateY(-2px);
+        }
         .btn-b { background: var(--ps5-red); color: #fff; }
-        .vote-btn:active { transform: scale(0.96); opacity: 0.8; }
+        .btn-b:hover { 
+            background: var(--ps5-hover); 
+            box-shadow: 0 0 20px rgba(163, 59, 59, 0.4);
+            transform: translateY(-2px);
+        }
 
         /* --- 規則與頁尾 --- */
         .rules-card { background: #070707; border-radius: 24px; padding: 25px; margin-top: 40px; border: 1px solid #151515; }
         .rules-title { font-size: 15px; font-weight: bold; margin-bottom: 15px; color: var(--gold-light); border-left: 4px solid var(--gold-primary); padding-left: 12px; }
         .rules-list { font-size: 13px; color: var(--text-dim); list-style: none; line-height: 1.8; }
         .rules-list li { margin-bottom: 8px; }
-
         .footer { margin-top: 40px; font-size: 11px; color: #444; text-align: justify; line-height: 1.8; padding: 0 10px; }
 
         .lang-switch { position: fixed; top: 15px; right: 15px; display: flex; gap: 5px; z-index: 1000; }
@@ -129,7 +195,7 @@
     </div>
 
     <div class="container">
-        <!-- 修改後的白金金 3D 標題 -->
+        <!-- 3D 白金金標題 -->
         <h1 class="title-prestige" id="ui-main-title">VIP專屬抽獎池</h1>
 
         <!-- 個人狀態 -->
@@ -145,13 +211,13 @@
             </div>
         </div>
 
-        <!-- 限定成就加碼 -->
+        <!-- 限定成就加碼 (流金熔岩背景) -->
         <div class="legendary-card">
             <div class="legendary-inner">
                 <i class="fa-solid fa-crown crown-icon" id="crown-iphone"></i>
                 <h2 class="legendary-title" id="text-achieve-title">限定成就加碼</h2>
                 <img src="https://www.apple.com/v/iphone/home/bu/images/overview/select/iphone_16_pro__er-_large.png" alt="iPhone 17 Pro" class="iphone-img">
-                <p class="legendary-desc" id="text-achieve-desc">50.0% vs 50.0% 全體抽 iPhone 17 Pro<br>原獎項將不另行抽出</p>
+                <p class="legendary-desc" id="text-achieve-desc">50% vs 50% 全體抽 iPhone 17 Pro<br>原獎項將不另行抽出</p>
             </div>
         </div>
 
@@ -169,15 +235,15 @@
             </div>
         </div>
 
-        <!-- 進度 Bar -->
+        <!-- 進度 Bar (內嵌文字與 VS) -->
         <div class="bar-container">
-            <div class="bar-a" id="bar-a" style="width: 50%;"></div>
-            <div class="bar-b" id="bar-b" style="width: 50%;"></div>
-        </div>
-
-        <div class="ratio-row">
-            <span id="val-ratio-a" class="ratio-a">0.0%</span>
-            <span id="val-ratio-b" class="ratio-b">0.0%</span>
+            <div class="bar-a" id="bar-a" style="width: 50%;">
+                <span id="val-ratio-a" class="bar-text">0%</span>
+            </div>
+            <div class="bar-b" id="bar-b" style="width: 50%;">
+                <span id="val-ratio-b" class="bar-text">0%</span>
+            </div>
+            <div class="vs-overlay">VS</div>
         </div>
         <p class="total-info"><span id="label-total">總計投票數：</span><span id="val-total">0</span></p>
 
@@ -193,9 +259,9 @@
             <ul class="rules-list" id="rules-content">
                 <li>1. 參與活動時，請先選擇欲參加之獎池，並完成投票。</li>
                 <li>2. 活動期間內不得更改已選擇之獎池。</li>
-                <li>3. 活動結束後將統計各獎池最終投票比例，比例計算至小數點後一位並採四捨五入。</li>
+                <li>3. 活動結束後將統計各獎池最終投票比例，比例計算採四捨五入至整數。</li>
                 <li>4. 若各獎池投票比例不相同，則僅從「投票比例最高之獎池」參與用戶中抽出得主。</li>
-                <li>5. 若最終比例為 50.0% vs 50.0%，則改理由全體參與用戶中抽出 iPhone 17 Pro 乙名，原設定獎項將不另行抽出。</li>
+                <li>5. 若最終比例為 50% vs 50%，則改理由全體參與用戶中抽出 iPhone 17 Pro 乙名，原設定獎項將不另行抽出。</li>
                 <li>6. 中獎用戶須於指定時間內親自至本公司完成領獎手續。</li>
             </ul>
         </div>
@@ -217,7 +283,7 @@
                 no: "等級不足",
                 total: "總計投票數：",
                 achieve: "限定成就加碼",
-                achieve_desc: "50.0% vs 50.0% 全體抽 iPhone 17 Pro<br>原獎項將不另行抽出",
+                achieve_desc: "50% vs 50% 全體抽 iPhone 17 Pro<br>原獎項將不另行抽出",
                 confirm: "投票一經送出後不得更改，確定投票給 "
             },
             'en': {
@@ -228,7 +294,7 @@
                 no: "Ineligible",
                 total: "Total Votes: ",
                 achieve: "Limited Achievement",
-                achieve_desc: "50.0% vs 50.0%: Draw for iPhone 17 Pro<br>Standard prizes will be cancelled",
+                achieve_desc: "50% vs 50%: Draw for iPhone 17 Pro<br>Standard prizes will be cancelled",
                 confirm: "Final choice cannot be changed. Vote for "
             }
         };
@@ -278,15 +344,17 @@
                 tag.className = "status-tag ineligible";
             }
 
-            const ra = parseFloat(data.ratio_a) * 100;
-            const rb = parseFloat(data.ratio_b) * 100;
+            // 【邏輯更新】四捨五入至整數
+            const ra = Math.round(parseFloat(data.ratio_a) * 100);
+            const rb = Math.round(parseFloat(data.ratio_b) * 100);
             
-            document.getElementById('val-ratio-a').innerText = ra.toFixed(1) + '%';
-            document.getElementById('val-ratio-b').innerText = rb.toFixed(1) + '%';
+            document.getElementById('val-ratio-a').innerText = ra + '%';
+            document.getElementById('val-ratio-b').innerText = rb + '%';
             document.getElementById('bar-a').style.width = ra + '%';
             document.getElementById('bar-b').style.width = rb + '%';
             document.getElementById('val-total').innerText = data.total_valid_votes.toLocaleString();
 
+            // 皇冠判斷
             document.getElementById('crown-a').style.display = 'none';
             document.getElementById('crown-b').style.display = 'none';
             document.getElementById('crown-iphone').style.display = 'none';
