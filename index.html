@@ -355,10 +355,48 @@
             }
         }
 
-        function handleVote(choice) {
-            const t = i18n[currentLang];
-            if (confirm(`${t.confirm}${choice}?`)) {
-                alert("Confirmed!");
+        async function handleVote(choice) {
+    const uid = getUserId();
+    const t = i18n[currentLang];
+    const choiceKey = choice === 'Switch' ? 'A' : 'B'; // 對應資料庫的 A/B
+
+    // 1. 前端初步擋掉等級不足的人
+    const currentLevelStr = document.getElementById('val-level').innerText.replace('Lv. ', '');
+    const currentLevel = parseInt(currentLevelStr);
+    
+    if (isNaN(currentLevel) || currentLevel < 20) {
+        alert(t.no);
+        return;
+    }
+
+    // 2. 確認警語
+    if (confirm(`${t.confirm}${choice}?`)) {
+        try {
+            // 顯示 Loading (可選)
+            const btnA = document.getElementById('btn-vote-a');
+            const btnB = document.getElementById('btn-vote-b');
+            btnA.disabled = btnB.disabled = true;
+
+            const response = await fetch("https://vote-api-service-905468082258.asia-east1.run.app/api/v1/vote", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ user_id: uid, choice: choiceKey })
+            });
+
+            if (response.ok) {
+                alert("投票成功！數據約每 5 分鐘統計更新一次。");
+                fetchData(); // 重新抓取資料
+            } else {
+                const err = await response.json();
+                alert(`投票失敗: ${err.error}`);
+            }
+        } catch (error) {
+            alert("網路錯誤，請稍後再試。");
+        } finally {
+            btnA.disabled = btnB.disabled = false;
+        }
+    }
+}
             }
         }
 
